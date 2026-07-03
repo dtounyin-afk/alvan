@@ -1,7 +1,7 @@
 /* ================================================================
    MODAAFRIK — PRODUCT PAGE (Light Design)
    ================================================================ */
-.product-page { padding: 20px 0 80px; }
+.product-page { padding: 20px 0 80px; padding-top: calc(var(--nav-h) + 20px); }
 
 .product-layout {
   display: grid; grid-template-columns: 1fr 1fr;
@@ -192,4 +192,12 @@
   .product-gallery { position: static; }
   .gallery-main { height: 320px; font-size: 80px; }
   .pi-price-main { font-size: 26px; }
+}
+@media (max-width: 480px) {
+  .product-page { padding: 12px 0 60px; }
+  .pi-title { font-size: 20px; }
+  .pi-actions { flex-wrap: wrap; }
+  .pi-add-btn { min-width: 100%; justify-content: center; }
+  .gallery-thumbs { flex-wrap: wrap; }
+  .tabs-nav { flex-wrap: nowrap; overflow-x: auto; }
 }

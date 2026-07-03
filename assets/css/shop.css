@@ -2,7 +2,7 @@
    MODAAFRIK — SHOP PAGE
    ================================================================ */
 
-.shop-page { padding: 20px 0 80px; }
+.shop-page { padding: 20px 0 80px; padding-top: calc(var(--nav-h) + 20px); }
 
 .shop-layout {
   display: grid;

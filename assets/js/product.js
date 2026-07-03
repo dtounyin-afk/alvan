@@ -23,18 +23,18 @@ async function loadProduct(id) {
     if (data.product) currentProduct = data.product;
   } catch {}
 
-  // 2. LocalStore — uniquement les produits APPROUVÉS par l'admin
+  // 2. LocalStore — produits approuvés uniquement (publiés par vendeur)
   if (!currentProduct) {
-    const approved = window.LocalStore?.getApprovedProducts() || [];
+    const approved = LocalStore.getApprovedProducts();
     const found    = approved.find(p => p.id === id);
     if (found) {
       currentProduct = {
         ...found,
-        reviews: (window.MOCK_REVIEWS || []).filter(r => r.productId === id),
-        vendor:  found.vendor || {
-          storeName: found.storeName || found.vendorId || 'Boutique',
+        reviews: JSON.parse(localStorage.getItem('ma_reviews_' + id) || '[]'),
+        vendor: found.vendor || {
+          storeName: found.storeName || 'Boutique',
           storeCity: found.storeCity || 'Cameroun',
-          rating: 0,
+          rating: found.rating || 0,
         },
       };
     }

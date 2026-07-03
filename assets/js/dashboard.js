@@ -19,29 +19,58 @@ function loadVendorInfo() {
 }
 
 async function loadDashData() {
-  // Produits soumis par CE vendeur (en attente admin)
-  const user  = Auth.user();
-  const local = LocalStore.getPendingProducts().filter(p =>
-    !user || p.vendorId === user.id || p.vendorId === 'vnd-local'
-  );
-  dashProducts = local;
-  // Commandes
+  const user = Auth.user();
+
+  // ── Produits du vendeur ──
+  // Priorité: API backend → LocalStore (approuvés) → vide
+  dashProducts = [];
+  try {
+    if (Auth.isLoggedIn()) {
+      const r = await Api.products.list({ limit: 200 });
+      if (r.products?.length) {
+        // Filtrer uniquement les produits de ce vendeur
+        dashProducts = r.products.filter(p => p.vendorId === user?.id);
+      }
+    }
+  } catch {}
+
+  // Fallback LocalStore si API indisponible
+  if (!dashProducts.length) {
+    const approved = LocalStore.getApprovedProducts();
+    dashProducts = user ? approved.filter(p => p.vendorId === user.id) : approved;
+  }
+
+  // ── Commandes du vendeur ──
   dashOrders = [];
   try {
-    const r = await Api.orders.vendorOrders();
-    if (r.orders?.length) dashOrders = r.orders;
+    if (Auth.isLoggedIn()) {
+      const r = await Api.orders.vendorOrders();
+      if (r.orders?.length) dashOrders = r.orders;
+    }
   } catch {}
+
+  // Fallback localStorage
+  if (!dashOrders.length) {
+    try {
+      const all = JSON.parse(localStorage.getItem('ma_client_orders') || '[]');
+      dashOrders = user ? all.filter(o => o.items?.some(i => i.vendorId === user.id)) : [];
+    } catch {}
+  }
+
   renderOverview();
   renderProductsList();
   renderOrdersTable(dashOrders);
   renderEarnings();
   renderReviews();
-  // Pré-remplir les paramètres
+
+  // Pré-remplir paramètres
   if (user) {
-    const sn = document.getElementById('setStoreName'); if(sn) sn.value = user.storeName||'';
-    const sd = document.getElementById('setStoreDesc'); if(sd) sd.value = user.storeDesc||'';
-    const ph = document.getElementById('setPhone');     if(ph) ph.value = user.phone||'';
-    const ad = document.getElementById('setAddress');   if(ad) ad.value = user.storeAddress||'';
+    ['setStoreName','setStoreDesc','setPhone','setAddress'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const map = { setStoreName:user.storeName, setStoreDesc:user.storeDesc, setPhone:user.phone, setAddress:user.storeAddress };
+      el.value = map[id] || '';
+    });
   }
 }
 
@@ -180,7 +209,7 @@ function previewPhotos(input) {
   });
 }
 
-async function saveProduct(status='active') {
+async function saveProduct(status = 'active') {
   const name     = document.getElementById('apName')?.value.trim();
   const price    = Number(document.getElementById('apPrice')?.value);
   const cat      = document.getElementById('apCat')?.value;
@@ -197,12 +226,8 @@ async function saveProduct(status='active') {
   const tags   = (document.getElementById('apTags')?.value||'').split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
   const sale   = Number(document.getElementById('apSale')?.value) || null;
 
-  // Emoji et gradient par catégorie
-  const emojiMap = {
-    'robes-pagnes':'👗', 'boubous':'🥻', 'hommes':'👔', 'enfants':'👶',
-    'accessoires':'👜', 'bijoux':'💎', 'chaussures':'👡'
-  };
-  const gradMap = {
+  const emojiMap = { 'robes-pagnes':'👗','boubous':'🥻','hommes':'👔','enfants':'👶','accessoires':'👜','bijoux':'💎','chaussures':'👡' };
+  const gradMap  = {
     'robes-pagnes':'linear-gradient(135deg,#e67e22,#f39c12)',
     'boubous':     'linear-gradient(135deg,#2c3e50,#3498db)',
     'hommes':      'linear-gradient(135deg,#27ae60,#2c3e50)',
@@ -213,55 +238,76 @@ async function saveProduct(status='active') {
   };
 
   const vendor = Auth.user();
+  const prodId = 'prd-' + Date.now();
+
   const newProduct = {
-    id:          'prd-local-' + Date.now(),
-    name,
-    shortDesc:   shortDesc || name,
-    description: fullDesc || shortDesc || name,
-    price,
-    salePrice:   sale || null,
-    emoji:       emojiMap[cat] || '👗',
-    gradient:    gradMap[cat] || 'linear-gradient(135deg,#e8e0d0,#d4c8b8)',
-    badge:       sale ? 'promo' : (status === 'active' ? 'new' : null),
-    rating:      0,
-    reviewCount: 0,
-    vendorId:    vendor?.id || 'vnd-local',
+    id: prodId,
+    name, shortDesc: shortDesc || name, description: fullDesc || shortDesc || name,
+    price, salePrice: sale || null,
+    emoji:    emojiMap[cat] || '👗',
+    gradient: gradMap[cat]  || 'linear-gradient(135deg,#e8e0d0,#d4c8b8)',
+    badge:    sale ? 'promo' : 'new',
+    rating: 0, reviewCount: 0,
+    vendorId: vendor?.id || 'vnd-local',
     vendor: {
-      storeName: vendor?.storeName || (vendor?.firstName ? `${vendor.firstName} ${vendor.lastName}` : 'Ma Boutique'),
+      id:        vendor?.id || 'vnd-local',
+      storeName: vendor?.storeName || `${vendor?.firstName||''} ${vendor?.lastName||''}`.trim() || 'Ma Boutique',
       storeCity: vendor?.storeCity || 'Cameroun',
-      rating:    vendor?.rating || 5,
+      rating: 0,
     },
     sizes:    sizes.length ? sizes : ['Unique'],
     colors:   colors.length ? colors : ['Multicolore'],
-    stock,
-    category: cat,
-    tags,
-    isFeatured: false,
-    isNew:      status === 'active',
-    isActive:   status === 'active',
-    createdAt:  new Date().toISOString(),
+    stock, category: cat, tags,
+    isFeatured: false, isNew: true, isActive: status === 'active',
+    createdAt: new Date().toISOString(),
+    images: [],
   };
 
-  // Essayer l'API
+  // ── Upload images ──
+  const photoInput = document.getElementById('photoInput');
+  if (photoInput?.files?.length) {
+    try {
+      const res = await Api.upload.product([...photoInput.files]);
+      if (res.urls?.length) {
+        newProduct.images   = res.urls;
+        newProduct.gradient = `url(${res.urls[0]}) center/cover`;
+      }
+    } catch { /* Pas d'upload — on garde l'emoji */ }
+  }
+
+  // ── Publier via API backend (partagé entre tous les utilisateurs) ──
+  let publishedViaApi = false;
   try {
-    await Api.products.create({
-      name, shortDesc: newProduct.shortDesc, price, salePrice: sale,
-      category: cat, sizes, colors, stock, tags
+    const res = await Api.products.create({
+      name, shortDesc: newProduct.shortDesc, description: newProduct.description,
+      price, salePrice: sale, category: cat,
+      sizes: newProduct.sizes, colors: newProduct.colors,
+      stock, tags, emoji: newProduct.emoji, gradient: newProduct.gradient,
+      badge: newProduct.badge, images: newProduct.images,
     });
-  } catch { /* Pas de backend ? On continue en local */ }
+    if (res.product?.id) {
+      newProduct.id    = res.product.id;
+      publishedViaApi  = true;
+    }
+  } catch { /* Backend indisponible */ }
 
-  // Sauvegarder dans les produits EN ATTENTE (pas sur la vitrine)
-  // L'admin doit approuver avant que le produit soit visible
-  LocalStore.addPendingProduct(newProduct);
-  dashProducts.unshift({...newProduct, status:'pending_review'});
+  // ── Sauvegarder en LocalStore (cache local) ──
+  LocalStore.saveApprovedProducts([newProduct, ...LocalStore.getApprovedProducts()]);
+  dashProducts.unshift({ ...newProduct });
 
-  showToast(`📤 "${name}" soumis pour approbation. L'administrateur doit l'approuver pour qu'il soit visible sur la vitrine.`, 'success', 5000);
+  const msg = publishedViaApi
+    ? `✅ "${name}" publié ! Visible par tous sur la plateforme.`
+    : `✅ "${name}" sauvegardé localement. Connectez le backend pour le partager.`;
+  showToast(msg, 'success', 5000);
 
   resetProductForm();
   renderProductsList();
   renderOverview();
-  setTimeout(() => showSection('products', document.querySelector('.sidebar-link:nth-child(2)')), 1500);
+  setTimeout(() => {
+    showSection('products', document.querySelector('.sidebar-link:nth-child(2)'));
+  }, 1500);
 }
+
 
 function saveDraft() { saveProduct('draft'); }
 
@@ -281,7 +327,10 @@ function editProduct(id) {
 
 function deleteProduct(id) {
   if (!confirm('Supprimer ce produit ? Cette action est irréversible.')) return;
-  LocalStore.deletePendingProduct(id);
+  // Supprimer de LocalStore approuvés
+  LocalStore.removeApprovedProduct(id);
+  // Supprimer via API
+  Api.products.delete(id).catch(() => {});
   dashProducts = dashProducts.filter(p => p.id !== id);
   renderProductsList();
   renderOverview();
@@ -326,7 +375,28 @@ function filterOrders(status, btn) {
 }
 
 async function updateStatus(id, status) {
-  try { await Api.orders.updateStatus(id, status); } catch {}
+  try {
+    const token = Auth.token();
+    if (token && !token.startsWith('local_')) {
+      await Api.orders.updateStatus(id, status);
+    }
+  } catch (err) {
+    console.warn('API updateStatus failed, trying local fallback:', err);
+  }
+  
+  // Local persistence update
+  try {
+    const allLocal = JSON.parse(localStorage.getItem('ma_orders') || '[]');
+    const i = allLocal.findIndex(o => o.id === id);
+    if (i >= 0) {
+      allLocal[i].status = status;
+      allLocal[i].updatedAt = new Date().toISOString();
+      localStorage.setItem('ma_orders', JSON.stringify(allLocal));
+    }
+  } catch (err) {
+    console.error('Failed to update local order status:', err);
+  }
+
   const o = dashOrders.find(x => x.id===id); if(o) o.status=status;
   showToast('Statut mis à jour', 'success');
 }

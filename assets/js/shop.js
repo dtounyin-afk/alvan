@@ -12,12 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 async function loadProducts() {
-  // Uniquement les produits approuvés par l'admin
-  const approved = LocalStore.getApprovedProducts();
-  allProducts = [...approved];
+  // Source unique : produits approuvés dans LocalStore
+  allProducts = LocalStore.getApprovedProducts();
 
+  // Essayer l'API en bonus
   try {
-    const r = await Api.products.list({ limit:100 });
+    const r = await Api.products.list({ limit: 200 });
     if (r.products?.length) allProducts = r.products;
   } catch {}
 

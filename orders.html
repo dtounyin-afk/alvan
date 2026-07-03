@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Mes commandes — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/orders.css"/>
+</head>
+<body>
+
+<header class="header" id="header">
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5f0e8"/></svg></div>
+      ModaAfrik
+    </a>
+    <div class="nav-search">
+      <input type="text" placeholder="Rechercher des produits…"/>
+      <button><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="vendor-register.html" class="btn-vendor" style="display:none">Vendre</a>
+      <a href="auth.html" class="nav-icon" title="Compte"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+      <a href="cart.html" class="nav-icon cart-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<main class="orders-page page-top container">
+  <div class="orders-header">
+    <div>
+      <div class="breadcrumb">
+        <a href="index.html">Accueil</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+        <span>Mes commandes</span>
+      </div>
+      <h1 class="orders-title">Mes commandes</h1>
+    </div>
+    <a href="shop.html" class="btn-primary btn-sm">Continuer mes achats</a>
+  </div>
+
+  <!-- FILTRES -->
+  <div class="orders-filters">
+    <button class="size-tag active" onclick="filterOrders('all',this)">Toutes</button>
+    <button class="size-tag" onclick="filterOrders('pending',this)">En attente</button>
+    <button class="size-tag" onclick="filterOrders('processing',this)">En préparation</button>
+    <button class="size-tag" onclick="filterOrders('shipped',this)">Expédiées</button>
+    <button class="size-tag" onclick="filterOrders('delivered',this)">Livrées</button>
+  </div>
+
+  <!-- LISTE COMMANDES -->
+  <div id="ordersList"></div>
+
+  <!-- VIDE -->
+  <div id="ordersEmpty" class="orders-empty hidden">
+    <div class="orders-empty-icon">📦</div>
+    <h3>Aucune commande trouvée</h3>
+    <p>Vous n'avez pas encore passé de commande sur ModaAfrik.</p>
+    <a href="shop.html" class="btn-primary" style="margin-top:20px;display:inline-flex">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>
+      Découvrir la boutique
+    </a>
+  </div>
+</main>
+
+<!-- MODAL DÉTAIL COMMANDE -->
+<div class="modal-overlay hidden" id="orderDetailModal">
+  <div class="modal-box" style="max-width:560px;text-align:left;padding:32px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+      <h3 id="orderDetailTitle" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800"></h3>
+      <button onclick="document.getElementById('orderDetailModal').classList.add('hidden')" style="color:var(--text-3);font-size:20px;cursor:pointer">✕</button>
+    </div>
+    <div id="orderDetailBody"></div>
+  </div>
+</div>
+
+<footer class="footer" style="margin-top:60px">
+  <div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2025 ModaAfrik Cameroun</span></div></div>
+</footer>
+
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/orders-page.js" defer></script>
+</body>
+</html>

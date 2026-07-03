@@ -158,7 +158,39 @@ document.addEventListener('DOMContentLoaded', () => {
   Cart.updateBadge();
   initStickyHeader();
   initUserMenu();
+  initMobileSearch();
+  fixNavbarOffset();
 });
+
+/* ── FIX NAVBAR OFFSET ──────────────────────────────────────
+   Mesure la hauteur réelle du header et compense le contenu
+── */
+function fixNavbarOffset() {
+  const header = document.getElementById('header');
+  if (!header) return;
+  // Ne pas appliquer sur dashboard/admin (pas de header fixe principal)
+  const isDash = document.querySelector('.dash-body, .dashboard-body');
+  if (isDash) return;
+
+  function apply() {
+    const h = header.offsetHeight || 100;
+    document.documentElement.style.setProperty('--nav-h', h + 'px');
+    // Appliquer le padding-top aux main/container principaux
+    const targets = document.querySelectorAll(
+      'main:not(.dash-content), .shop-page, .cart-main, .product-page, .orders-page, .vp-page'
+    );
+    targets.forEach(el => {
+      // Seulement si pas déjà défini manuellement
+      const current = parseFloat(window.getComputedStyle(el).paddingTop);
+      if (current < h - 10) {
+        el.style.paddingTop = h + 'px';
+      }
+    });
+  }
+  apply();
+  window.addEventListener('resize', apply, { passive: true });
+  window.addEventListener('load',   apply);
+}
 window.Cart = Cart;
 window.Auth = Auth;
 window.LocalStore = LocalStore;
@@ -193,7 +225,7 @@ function initUserMenu() {
           <div class="ud-divider"></div>
           ${u.role === 'admin'  ? `<a href="admin.html" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Panneau admin</a>` : ''}
           ${u.role === 'vendor' ? `<a href="vendor-dashboard.html" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Mon dashboard</a>` : ''}
-          ${u.role === 'client' ? `<a href="#" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Mes commandes</a>` : ''}
+          ${u.role === 'client' ? `<a href="orders.html" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Mes commandes</a>` : ''}
           <div class="ud-divider"></div>
           <button class="ud-item ud-logout" onclick="Auth.logout()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -222,4 +254,74 @@ function toggleUserMenu(btn) {
 
 function roleLabel(role) {
   return { admin:'Super Administrateur', vendor:'Vendeur', client:'Client' }[role] || role;
+}
+
+/* ── MOBILE SEARCH BAR ── */
+function initMobileSearch() {
+  const navActions = document.querySelector('.nav-actions');
+  const navbar     = document.querySelector('.navbar');
+  const header     = document.getElementById('header');
+  if (!navActions || !navbar || !header) return;
+
+  // Eviter double injection
+  if (document.querySelector('.mobile-search-toggle-btn')) return;
+
+  // Créer le bouton toggle de recherche pour mobile
+  const toggleBtn = document.createElement('button');
+  toggleBtn.className = 'nav-icon mobile-search-toggle-btn';
+  toggleBtn.title = 'Rechercher';
+  toggleBtn.innerHTML = `
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>`;
+  
+  // Insérer avant le panier ou le profil dans nav-actions
+  navActions.insertBefore(toggleBtn, navActions.firstChild);
+
+  // Créer la rangée de recherche mobile
+  const searchRow = document.createElement('div');
+  searchRow.className = 'mobile-search-row';
+  searchRow.style.display = 'none';
+  searchRow.innerHTML = `
+    <div class="mobile-search-input-wrap">
+      <input type="text" placeholder="Rechercher sur ModaAfrik..." class="mobile-search-input" />
+      <button class="mobile-search-submit">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+    </div>
+  `;
+
+  // Insérer juste après la navbar
+  header.insertBefore(searchRow, navbar.nextSibling);
+
+  // Gérer le toggle
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = searchRow.style.display !== 'none';
+    searchRow.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) {
+      searchRow.querySelector('.mobile-search-input').focus();
+    }
+  });
+
+  const doMobileSearch = () => {
+    const q = searchRow.querySelector('.mobile-search-input').value.trim();
+    if (q) {
+      location.href = `shop.html?search=${encodeURIComponent(q)}`;
+    }
+  };
+
+  searchRow.querySelector('.mobile-search-submit').addEventListener('click', doMobileSearch);
+  searchRow.querySelector('.mobile-search-input').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doMobileSearch();
+  });
+
+  // Fermer la recherche mobile si clic en dehors
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.mobile-search-row') && !e.target.closest('.mobile-search-toggle-btn')) {
+      searchRow.style.display = 'none';
+    }
+  });
 }

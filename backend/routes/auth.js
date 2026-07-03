@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken');
+const { v4: uuidv4 } = require('uuid');
 const { body, validationResult } = require('express-validator');
 const db     = require('../data/db');
 const { verifyToken } = require('../middleware/auth');
@@ -18,11 +19,11 @@ const safeUser = (u) => {
 
 // POST /api/auth/register — client
 router.post('/register', [
-  body('firstName').trim().notEmpty().withMessage('Prénom requis'),
-  body('lastName').trim().notEmpty().withMessage('Nom requis'),
-  body('email').isEmail().withMessage('Email invalide').normalizeEmail(),
-  body('password').isLength({ min: 6 }).withMessage('Mot de passe min 6 caractères'),
-  body('phone').trim().notEmpty().withMessage('Téléphone requis'),
+  body('firstName').trim().notEmpty(),
+  body('lastName').trim().notEmpty(),
+  body('email').isEmail().normalizeEmail(),
+  body('password').isLength({ min: 6 }),
+  body('phone').trim().notEmpty(),
 ], (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(422).json({ success: false, errors: errors.array() });
@@ -32,37 +33,38 @@ router.post('/register', [
     return res.status(409).json({ success: false, message: 'Email déjà utilisé' });
 
   const hashed = bcrypt.hashSync(password, 10);
-  const user   = db.users.create({ firstName, lastName, email: email.toLowerCase(), password: hashed, phone, role: 'client', isActive: true, avatar: null });
+  const user   = db.users.create({ id: uuidv4(), firstName, lastName, email: email.toLowerCase(), password: hashed, phone, role: 'client', isActive: true, avatar: null });
   const token  = sign(user);
   res.status(201).json({ success: true, token, user: safeUser(user) });
 });
 
-// POST /api/auth/register-vendor
+// POST /api/auth/register-vendor (admin only via invite)
 router.post('/register-vendor', [
   body('firstName').trim().notEmpty(),
   body('lastName').trim().notEmpty(),
   body('email').isEmail().normalizeEmail(),
   body('password').isLength({ min: 6 }),
-  body('phone').trim().notEmpty(),
-  body('storeName').trim().notEmpty().withMessage('Nom boutique requis'),
-  body('storeCity').trim().notEmpty().withMessage('Ville boutique requise'),
+  body('storeName').trim().notEmpty(),
 ], (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(422).json({ success: false, errors: errors.array() });
 
-  const { firstName, lastName, email, password, phone, storeName, storeCity, storeAddress, storeDesc } = req.body;
+  const { firstName, lastName, email, password, phone, storeName, storeCity, storeAddress, storeDesc, storeCategory } = req.body;
   if (db.users.findByEmail(email))
     return res.status(409).json({ success: false, message: 'Email déjà utilisé' });
 
   const hashed   = bcrypt.hashSync(password, 10);
   const storeSlug = storeName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
   const user = db.users.create({
-    firstName, lastName, email: email.toLowerCase(), password: hashed, phone, role: 'vendor', isActive: false,
-    storeName, storeCity, storeAddress: storeAddress || '', storeDesc: storeDesc || '',
-    storeSlug, rating: 0, totalSales: 0, avatar: null,
+    id: uuidv4(), firstName, lastName, email: email.toLowerCase(), password: hashed,
+    phone: phone || '', role: 'vendor', isActive: true,
+    storeName, storeCity: storeCity || '', storeAddress: storeAddress || '',
+    storeDesc: storeDesc || '', storeCategory: storeCategory || '', storeSlug,
+    rating: 0, totalSales: 0, avatar: null,
+    createdBy: 'admin', approvedAt: new Date().toISOString(),
   });
   const token = sign(user);
-  res.status(201).json({ success: true, token, user: safeUser(user), message: 'Boutique créée, en attente de validation (24h).' });
+  res.status(201).json({ success: true, token, user: safeUser(user) });
 });
 
 // POST /api/auth/login
@@ -79,7 +81,7 @@ router.post('/login', [
     return res.status(401).json({ success: false, message: 'Email ou mot de passe incorrect' });
 
   if (!user.isActive)
-    return res.status(403).json({ success: false, message: 'Compte désactivé. Contactez le support.' });
+    return res.status(403).json({ success: false, message: 'Compte désactivé' });
 
   const token = sign(user);
   res.json({ success: true, token, user: safeUser(user) });
@@ -94,7 +96,7 @@ router.get('/me', verifyToken, (req, res) => {
 
 // PUT /api/auth/me
 router.put('/me', verifyToken, (req, res) => {
-  const allowed = ['firstName','lastName','phone','avatar'];
+  const allowed = ['firstName','lastName','phone','avatar','storeName','storeDesc','storeCity','storeAddress'];
   const updates = {};
   allowed.forEach(k => { if (req.body[k] !== undefined) updates[k] = req.body[k]; });
   const user = db.users.update(req.user.id, updates);

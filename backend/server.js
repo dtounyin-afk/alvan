@@ -15,18 +15,23 @@ app.use(helmet({
 }));
 
 // ─── CORS ────────────────────────────────────────────────────────────────────
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'http://localhost:3000',
-];
-
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, etc.)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error(`CORS policy: origin ${origin} not allowed`));
+    // En production : accepter toutes les origines (site hébergé)
+    if (process.env.NODE_ENV === 'production') return callback(null, true);
+    // En dev : liste blanche
+    const allowed = [
+      process.env.FRONTEND_URL || 'http://localhost:5500',
+      'http://127.0.0.1:5500',
+      'http://localhost:3000',
+      'http://localhost:8080',
+      'http://localhost',
+      'null', // file:// protocol (local dev)
+    ];
+    if (!origin || allowed.includes(origin)) return callback(null, true);
+    // Accepter aussi les IP locales et WAMP
+    if (/^http:\/\/(localhost|127\.0\.0\.1|192\.168\.)/.test(origin)) return callback(null, true);
+    return callback(null, true); // Permissif en dev pour WAMP
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -61,6 +66,15 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ─── Static Files ────────────────────────────────────────────────────────────
 app.use('/uploads', express.static(path.join(__dirname, '../assets/uploads')));
+
+// Servir le frontend en production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..')));
+  // Toute route non-API renvoie index.html
+  app.get(/^(?!\/api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
+  });
+}
 
 // ─── Health Check ────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => {

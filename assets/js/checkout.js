@@ -55,16 +55,68 @@ function selectDelivery(opt) {
   deliveryOption = opt;
   document.querySelectorAll('.delivery-opt').forEach(el => el.classList.remove('selected'));
   document.getElementById(`opt-${opt}`)?.classList.add('selected');
-  const citySel = document.getElementById('citySel');
-  if (opt === 'interurbain') {
-    citySel?.classList.remove('hidden');
-    deliveryCost = 0;
-  } else {
+
+  const citySel    = document.getElementById('citySel');
+  const paySection = document.getElementById('step3PaySection');
+
+  if (opt === 'pickup') {
+    // Click & Collect = paiement CASH en boutique, pas besoin de paiement en ligne
     citySel?.classList.add('hidden');
     deliveryCity = '';
+    deliveryCost = 0;
+    // Masquer les méthodes de paiement en ligne, afficher message cash
+    if (paySection) {
+      paySection.innerHTML = `
+        <div style="background:#ecfdf5;border:1.5px solid #a7f3d0;border-radius:var(--r-lg);padding:20px;text-align:center">
+          <div style="font-size:40px;margin-bottom:10px">🏪</div>
+          <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#065f46;margin-bottom:6px">Paiement en espèces à la boutique</div>
+          <p style="font-size:14px;color:#047857;max-width:360px;margin:0 auto">
+            Vous avez choisi le retrait en boutique. Le paiement se fait directement <strong>en cash</strong> lors de votre passage chez le vendeur. Aucun paiement en ligne requis.
+          </p>
+          <div style="margin-top:14px;padding:10px 16px;background:#fff;border-radius:var(--r-md);font-size:13px;color:#065f46;display:inline-flex;align-items:center;gap:8px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Présentez la confirmation de commande au vendeur
+          </div>
+        </div>`;
+      paymentMethod = 'cash_on_pickup';
+    }
+  } else {
+    citySel?.classList.toggle('hidden', opt !== 'interurbain');
+    if (opt !== 'interurbain') { deliveryCity = ''; }
     deliveryCost = opt === 'local' ? 1000 : 0;
-    renderSummary();
+    // Restaurer les méthodes de paiement en ligne
+    if (paySection) paySection.innerHTML = buildPayMethodsHTML();
+    paymentMethod = '';
   }
+  renderSummary();
+}
+
+function buildPayMethodsHTML() {
+  return `
+    <div class="pay-methods">
+      <label class="payment-opt" id="pay-orange_money" onclick="selectPayment('orange_money')">
+        <input type="radio" name="payment" value="orange_money"/>
+        <div class="pm-logo" style="background:#FF6600"><span style="color:#fff;font-weight:800;font-size:13px">OM</span></div>
+        <div class="pm-info"><strong>Orange Money</strong><small>+237 Orange CM</small></div>
+      </label>
+      <label class="payment-opt" id="pay-mtn_momo" onclick="selectPayment('mtn_momo')">
+        <input type="radio" name="payment" value="mtn_momo"/>
+        <div class="pm-logo" style="background:#FFCC00"><span style="color:#000;font-weight:800;font-size:11px">MTN</span></div>
+        <div class="pm-info"><strong>MTN MoMo</strong><small>+237 MTN CM</small></div>
+      </label>
+      <label class="payment-opt" id="pay-cinetpay" onclick="selectPayment('cinetpay')">
+        <input type="radio" name="payment" value="cinetpay"/>
+        <div class="pm-logo" style="background:#003087"><span style="color:#fff;font-weight:800;font-size:12px">CP</span></div>
+        <div class="pm-info"><strong>CinetPay</strong><small>Carte / Mobile</small></div>
+      </label>
+      <label class="payment-opt" id="pay-fedapay" onclick="selectPayment('fedapay')">
+        <input type="radio" name="payment" value="fedapay"/>
+        <div class="pm-logo" style="background:#00875A"><span style="color:#fff;font-weight:800;font-size:12px">FP</span></div>
+        <div class="pm-info"><strong>FedaPay</strong><small>Carte / Mobile</small></div>
+      </label>
+    </div>
+    <div id="formMobile" class="pay-form hidden"></div>
+    <div id="formCard"   class="pay-form hidden"></div>`;
 }
 
 function updateShipping() {
@@ -125,11 +177,17 @@ function renderSummary() {
 
 /* ── TRAITEMENT PAIEMENT ── */
 async function processPayment() {
-  if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
-  if (!paymentMethod) { showToast('Choisissez une méthode de paiement', 'error'); return; }
-  if (paymentMethod === 'orange_money' || paymentMethod === 'mtn_momo') {
-    const phone = document.getElementById('mmPhone')?.value.trim();
-    if (!phone || !phone.startsWith('+237')) { showToast('Entrez un numéro camerounais valide (+237 6XX XXX XXX)', 'error'); return; }
+  // Cash on pickup : pas de validation de paiement en ligne
+  if (paymentMethod !== 'cash_on_pickup') {
+    if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
+    if (!paymentMethod) { showToast('Choisissez une méthode de paiement', 'error'); return; }
+    if (paymentMethod === 'orange_money' || paymentMethod === 'mtn_momo') {
+      const phone = document.getElementById('mmPhone')?.value.trim();
+      if (!phone || !phone.startsWith('+237')) { showToast('Entrez un numéro camerounais valide (+237 6XX XXX XXX)', 'error'); return; }
+    }
+  } else {
+    // Cash : juste vérifier les CGV
+    if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
   }
 
   const btn = document.getElementById('btnPay');
@@ -148,14 +206,52 @@ async function processPayment() {
 
   try {
     let orderNum;
-    if (Auth.isLoggedIn()) {
-      const res = await Api.orders.create(payload);
-      orderNum  = res.order.orderNumber;
+    const token = Auth.token();
+    const isLocalUser = token && token.startsWith('local_');
+
+    if (Auth.isLoggedIn() && !isLocalUser) {
+      try {
+        const res = await Api.orders.create(payload);
+        orderNum  = res.order.orderNumber;
+        saveOrderLocally(res.order);
+      } catch (err) {
+        console.warn('API order creation failed, using local fallback:', err);
+        orderNum = saveLocalOrderFallback(payload);
+      }
     } else {
-      orderNum = 'MA-' + String(Date.now()).slice(-5);
+      orderNum = saveLocalOrderFallback(payload);
     }
-    Cart.clear();
-    const modal = document.getElementById('confirmModal');
+
+  const itemsSnapshot = Cart.get(); // snapshot avant clear
+  Cart.clear();
+
+  // Sauvegarder la commande dans l'historique client
+  try {
+    const clientOrders = JSON.parse(localStorage.getItem('ma_client_orders') || '[]');
+    clientOrders.unshift({
+      id:             orderNum,
+      orderNumber:    orderNum,
+      items:          itemsSnapshot.map(i => ({
+        name: i.name, qty: i.qty, price: i.price,
+        size: i.size, color: i.color,
+        emoji: i.emoji, gradient: i.gradient,
+      })),
+      deliveryOption, deliveryCity, deliveryCost,
+      subtotal:       itemsSnapshot.reduce((s,i) => s + i.price*i.qty, 0),
+      total:          itemsSnapshot.reduce((s,i) => s + i.price*i.qty, 0) + deliveryCost,
+      paymentMethod,
+      status:         'pending',
+      firstName:      payload.firstName,
+      lastName:       payload.lastName,
+      phone:          payload.phone,
+      address:        payload.address,
+      city:           payload.city,
+      createdAt:      new Date().toISOString(),
+    });
+    localStorage.setItem('ma_client_orders', JSON.stringify(clientOrders));
+  } catch {}
+
+  const modal = document.getElementById('confirmModal');
     const onEl  = document.getElementById('orderNum');
     const pmEl  = document.getElementById('payMethodConfirm');
     if (modal) modal.classList.remove('hidden');
@@ -165,6 +261,68 @@ async function processPayment() {
     showToast(e.message || 'Erreur de paiement, réessayez.', 'error');
     if (btn) { btn.disabled=false; btn.querySelector('#btnPayTxt').textContent='Confirmer et payer'; }
   }
+}
+
+/* ── LOCAL FALLBACK HELPERS ── */
+function saveOrderLocally(order) {
+  try {
+    const localOrders = JSON.parse(localStorage.getItem('ma_orders') || '[]');
+    if (!localOrders.some(o => o.id === order.id)) {
+      localOrders.push(order);
+      localStorage.setItem('ma_orders', JSON.stringify(localOrders));
+    }
+  } catch(e) {
+    console.error('Error saving order locally:', e);
+  }
+}
+
+function saveLocalOrderFallback(payload) {
+  const localOrders = JSON.parse(localStorage.getItem('ma_orders') || '[]');
+  const nextNum = localOrders.length + 1;
+  const orderNumber = 'MA-' + String(nextNum).padStart(5, '0');
+  
+  const enrichedItems = Cart.get().map(i => ({
+    productId: i.productId || i.id,
+    name: i.name,
+    qty: i.qty,
+    price: i.price,
+    size: i.size || '',
+    color: i.color || '',
+    vendorId: i.vendorId || 'usr-002',
+    emoji: i.emoji || '👗',
+    gradient: i.gradient || ''
+  }));
+
+  const subtotal = Cart.subtotal();
+  const total = subtotal + deliveryCost;
+  const commission = Math.round(subtotal * 0.10);
+  const vendorAmount = subtotal - commission;
+  const u = Auth.user() || {};
+
+  const order = {
+    id: 'ord-' + Date.now(),
+    orderNumber,
+    customerId: u.id || 'usr-010',
+    items: enrichedItems,
+    deliveryOption,
+    deliveryCity,
+    deliveryCost,
+    subtotal,
+    total,
+    commission,
+    vendorAmount,
+    paymentMethod,
+    status: 'pending',
+    firstName: payload.firstName,
+    lastName: payload.lastName,
+    phone: payload.phone,
+    address: payload.address,
+    createdAt: new Date().toISOString()
+  };
+
+  localOrders.push(order);
+  localStorage.setItem('ma_orders', JSON.stringify(localOrders));
+  return orderNumber;
 }
 
 function payMethodLabel(m) {

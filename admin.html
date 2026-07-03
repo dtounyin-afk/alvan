@@ -109,16 +109,112 @@
 
     <!-- ═══ VENDEURS ═══ -->
     <div class="admin-sec hidden" id="asec-vendors">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px">
         <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Gestion des vendeurs</h2>
-        <div style="display:flex;gap:10px">
-          <button class="size-tag active" onclick="filterVendorsAdmin('all',this)" id="vf-all">Tous</button>
-          <button class="size-tag" onclick="filterVendorsAdmin('pending',this)">En attente</button>
-          <button class="size-tag" onclick="filterVendorsAdmin('active',this)">Actifs</button>
-          <button class="size-tag" onclick="filterVendorsAdmin('suspended',this)">Suspendus</button>
+        <button class="btn-primary btn-sm" onclick="toggleAddVendorForm()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Ajouter un vendeur
+        </button>
+      </div>
+
+      <!-- FORMULAIRE AJOUT VENDEUR ADMIN -->
+      <div class="dash-card" id="addVendorForm" style="display:none;margin-bottom:24px;border:2px solid var(--gold-2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+          <h3 style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:6px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Créer un compte vendeur directement
+          </h3>
+          <button onclick="toggleAddVendorForm()" style="color:var(--text-3);font-size:18px;cursor:pointer">✕</button>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+          <!-- Infos personnelles -->
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);margin-bottom:14px">Informations personnelles</div>
+            <div class="form-row">
+              <div class="form-group"><label>Prénom *</label><input type="text" id="avFN" placeholder="Prénom"/></div>
+              <div class="form-group"><label>Nom *</label><input type="text" id="avLN" placeholder="Nom"/></div>
+            </div>
+            <div class="form-group"><label>Email *</label><input type="email" id="avEmail" placeholder="vendeur@exemple.com"/></div>
+            <div class="form-group"><label>Téléphone (+237) *</label><input type="tel" id="avPhone" placeholder="+237 6XX XXX XXX"/></div>
+            <div class="form-group"><label>Numéro CNI</label><input type="text" id="avCNI" placeholder="N° CNI (optionnel si vérifié IRL)"/></div>
+            <div class="form-group">
+              <label>Mot de passe temporaire *</label>
+              <div class="input-pw">
+                <input type="password" id="avPwd" placeholder="Min. 8 caractères"/>
+                <button type="button" onclick="togglePwdAdmin('avPwd')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+              </div>
+              <button type="button" class="btn-ghost btn-sm" onclick="generateVendorPwd()" style="margin-top:6px;font-size:12px;color:var(--gold)">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,4 23,10 17,10"/><polyline points="1,20 1,14 7,14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                Générer un mot de passe sécurisé
+              </button>
+            </div>
+          </div>
+
+          <!-- Infos boutique -->
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);margin-bottom:14px">Informations boutique</div>
+            <div class="form-group"><label>Nom de la boutique *</label><input type="text" id="avStoreName" placeholder="Ex: Mode Cameroun Créations"/></div>
+            <div class="form-group"><label>Description</label><textarea id="avStoreDesc" rows="2" placeholder="Décrivez la boutique…"></textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label>Ville *</label>
+                <select id="avCity">
+                  <option value="">Sélectionner…</option>
+                  <option>Douala</option><option>Yaoundé</option><option>Bafoussam</option>
+                  <option>Bamenda</option><option>Garoua</option><option>Maroua</option>
+                  <option>Ngaoundéré</option><option>Bertoua</option><option>Kribi</option>
+                  <option>Limbé</option><option>Buea</option><option>Kumba</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Catégorie principale</label>
+                <select id="avCat">
+                  <option value="">Choisir…</option>
+                  <option>Robes &amp; Pagnes</option><option>Boubous</option>
+                  <option>Vêtements Homme</option><option>Enfants</option>
+                  <option>Accessoires</option><option>Bijoux</option>
+                  <option>Chaussures</option><option>Multi-catégories</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label>Adresse boutique</label><input type="text" id="avAddress" placeholder="Quartier, rue…"/></div>
+            <div class="form-group"><label>Méthode de paiement</label>
+              <select id="avPayMethod">
+                <option value="orange">Orange Money</option>
+                <option value="mtn">MTN MoMo</option>
+                <option value="bank">Virement bancaire</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Numéro de réception</label><input type="tel" id="avPayNum" placeholder="+237 6XX XXX XXX"/></div>
+          </div>
+        </div>
+
+        <div style="background:#fffbf0;border:1px solid #fde68a;border-radius:var(--r-md);padding:12px 14px;font-size:13px;color:#92400e;margin:16px 0;display:flex;gap:8px;align-items:flex-start">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Le vendeur recevra ses identifiants par SMS/email. Il devra changer son mot de passe à la première connexion. Vous certifiez avoir vérifié l'identité de cette personne.
+        </div>
+
+        <div style="display:flex;gap:12px;justify-content:flex-end">
+          <button class="btn-outline" onclick="toggleAddVendorForm()">Annuler</button>
+          <button class="btn-gold" onclick="createVendorAdmin()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+            Créer le compte vendeur
+          </button>
         </div>
       </div>
-      <div style="overflow-x:auto"><table class="orders-table" id="vendorsAdminTable"></table></div>
+
+      <!-- FILTRES + TABLEAU -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+        <button class="size-tag active" onclick="filterVendorsAdmin('all',this)">Tous</button>
+        <button class="size-tag" onclick="filterVendorsAdmin('pending',this)">Dossiers KYC</button>
+        <button class="size-tag" onclick="filterVendorsAdmin('active',this)">Actifs</button>
+        <button class="size-tag" onclick="filterVendorsAdmin('suspended',this)">Suspendus</button>
+        <input type="text" placeholder="Rechercher un vendeur…" oninput="searchVendorsAdmin(this.value)"
+          style="margin-left:auto;padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);font-size:13px;outline:none;color:var(--text);width:220px"/>
+      </div>
+
+      <div style="overflow-x:auto;border-radius:var(--r-lg);border:1px solid var(--border)">
+        <table class="orders-table" id="vendorsAdminTable" style="border-radius:var(--r-lg);overflow:hidden"></table>
+      </div>
     </div>
 
     <!-- ═══ PRODUITS ═══ -->

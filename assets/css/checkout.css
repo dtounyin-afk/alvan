@@ -147,4 +147,14 @@
   .ck-summary{position:static}
   .pay-methods{grid-template-columns:1fr}
   .ck-steps .ck-step-lbl{display:none}
+  .ck-nav{padding:12px 14px}
+  .ck-panel{padding:22px 16px}
+}
+@media(max-width:480px){
+  .ck-layout{padding:16px 12px 60px}
+  .delivery-opt{flex-wrap:wrap;gap:8px}
+  .do-price{margin-left:auto}
+  .card-3d{max-width:100%}
+  .ck-steps{gap:0}
+  .ck-line{width:16px}
 }

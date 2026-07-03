@@ -1,4 +1,4 @@
-﻿/* ================================================================
+/* ================================================================
    MODAAFRIK — DESIGN SYSTEM (Light / Marketplace moderne)
    ================================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap');
@@ -59,6 +59,12 @@ ul{list-style:none}
 
 .container{max-width:1280px;margin:0 auto;padding:0 24px}
 .hidden{display:none!important}
+
+/* ── OFFSET NAVBAR FIXE (navbar≈47px + nav-cats≈37px + marge = 100px) ── */
+:root { --nav-h: 100px; }
+
+/* Pages standard : compenser le header fixe */
+.page-top { padding-top: var(--nav-h); }
 
 /* ── HEADER ── */
 .header{
@@ -370,12 +376,61 @@ ul{list-style:none}
   .form-row{grid-template-columns:1fr}
   .products-grid{grid-template-columns:repeat(2,1fr);gap:12px}
   .footer-inner{grid-template-columns:1fr;gap:24px}
+  .navbar{padding:10px 14px;gap:10px}
+  .logo{font-size:18px}
+  .section{padding:40px 0}
+  .section-header{flex-direction:column;align-items:flex-start;gap:10px}
+  .container{padding:0 16px}
 }
 @media(max-width:480px){
   .products-grid{gap:8px}
-  .section{padding:48px 0}
-  .container{padding:0 14px}
+  .section{padding:36px 0}
+  .container{padding:0 12px}
+  .product-card .product-name{font-size:12px}
+  .price-main{font-size:14px}
+  .nav-actions{gap:6px}
+  .nav-icon{width:34px;height:34px}
 }
+/* Empêcher débordement global */
+*{max-width:100%;word-break:break-word}
+img,video,canvas,svg{max-width:100%;height:auto}
+table{table-layout:fixed;width:100%}
+input,select,textarea,button{max-width:100%}
+
+/* ── TABLE RESPONSIVE ── */
+.table-responsive{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r-md)}
+.table-responsive table{table-layout:auto;min-width:600px}
+
+/* ── MOBILE SEARCH BAR (injected via JS) ── */
+.mobile-search-toggle-btn{display:none}
+@media(max-width:768px){
+  .mobile-search-toggle-btn{display:flex}
+}
+.mobile-search-row{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:10px 14px;
+  animation:slideDown .22s cubic-bezier(.4,0,.2,1)
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.mobile-search-input-wrap{
+  display:flex;align-items:center;gap:8px;
+  background:var(--bg-2);border:1.5px solid var(--border);
+  border-radius:var(--r-full);overflow:hidden;
+  transition:border-color var(--t-med)
+}
+.mobile-search-input-wrap:focus-within{border-color:var(--gold-2);box-shadow:0 0 0 3px rgba(200,144,42,.1)}
+.mobile-search-input{
+  flex:1;padding:10px 16px;background:none;border:none;
+  outline:none;color:var(--text);font-size:14px;font-family:'Inter',sans-serif
+}
+.mobile-search-input::placeholder{color:var(--text-3)}
+.mobile-search-submit{
+  padding:10px 14px;color:var(--text-3);
+  display:flex;align-items:center;background:none;border:none;cursor:pointer;
+  transition:color var(--t-fast)
+}
+.mobile-search-submit:hover{color:var(--gold)}
 
 /* ── USER MENU ── */
 .user-menu-wrap {

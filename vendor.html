@@ -1,137 +1,190 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Boutique Vendeur — ModaAfrik</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"/>
-  <link rel="stylesheet" href="assets/css/main.css"/>
-  <style>
-    .vendor-profile-page{padding:100px 0 80px}
-    .vp-hero{background:linear-gradient(135deg,var(--bg-2),var(--bg-3));border:1px solid var(--border);border-left:none;border-right:none;padding:48px 0;margin-bottom:48px}
-    .vp-hero-inner{display:flex;gap:28px;align-items:center}
-    .vp-av{width:100px;height:100px;border-radius:50%;background:var(--grad-gold);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#080810;flex-shrink:0;border:4px solid rgba(232,168,56,.3)}
-    .vp-meta h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
-    .vp-meta p{font-size:14px;color:var(--text-2);max-width:500px;margin-bottom:12px}
-    .vp-kpis{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px}
-    .vp-kpi{text-align:center}
-    .vp-kpi strong{display:block;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gold)}
-    .vp-kpi span{font-size:12px;color:var(--text-3)}
-    @media(max-width:600px){.vp-hero-inner{flex-direction:column;text-align:center}.vp-kpis{justify-content:center}}
-  </style>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Boutique Vendeur — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<style>
+/* Vendor profile inline styles */
+.vp-page  { padding-top:var(--nav-h);padding-bottom:80px; }
+.vp-hero  { background:var(--bg-2);border-bottom:1px solid var(--border);padding:36px 0; }
+.vp-inner { display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap; }
+.vp-av    { width:80px;height:80px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--bg);flex-shrink:0; }
+.vp-info  { flex:1;min-width:0; }
+.vp-name  { font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--text);margin-bottom:6px; }
+.vp-desc  { font-size:14px;color:var(--text-2);line-height:1.6;margin-bottom:12px; }
+.vp-meta  { display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-3); }
+.vp-meta span { display:flex;align-items:center;gap:5px; }
+.vp-meta svg  { width:13px;height:13px; }
+.vp-stats { display:flex;gap:20px;margin-top:16px;flex-wrap:wrap; }
+.vp-stat  { background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:12px 18px;text-align:center; }
+.vp-stat strong { display:block;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gold); }
+.vp-stat span   { font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px; }
+.vp-prods { padding:40px 0 0; }
+.vp-prods h2 { font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:24px; }
+/* Loading / empty */
+.vp-loading { text-align:center;padding:60px;color:var(--text-3);font-size:14px; }
+.vp-not-found { text-align:center;padding:80px 20px; }
+.vp-not-found h2 { font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px; }
+</style>
 </head>
 <body>
-<header class="header scrolled" style="position:relative;backdrop-filter:none;background:var(--bg-2);border-bottom:1px solid var(--border)">
+
+<header class="header" id="header">
   <nav class="navbar">
-    <a href="index.html" class="logo"><span class="logo-star">✦</span>ModaAfrik</a>
-    <div class="nav-actions" style="margin-left:auto">
-      <a href="auth.html" class="nav-icon-btn">👤</a>
-      <a href="cart.html" class="nav-icon-btn cart-icon">🛒<span class="cart-badge" id="cartBadge">0</span></a>
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5f0e8"/></svg></div>
+      ModaAfrik
+    </a>
+    <div class="nav-search">
+      <input type="text" placeholder="Rechercher des produits…" autocomplete="off"/>
+      <button><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="auth.html" class="nav-icon" title="Compte"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+      <a href="cart.html" class="nav-icon cart-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
     </div>
   </nav>
+  <div class="nav-cats">
+    <div class="nav-cats-inner">
+      <a href="shop.html?cat=robes-pagnes">Robes &amp; Pagnes</a>
+      <a href="shop.html?cat=boubous">Boubous</a>
+      <a href="shop.html?cat=hommes">Hommes</a>
+      <a href="shop.html?cat=accessoires">Accessoires</a>
+      <a href="shop.html?cat=bijoux">Bijoux</a>
+      <a href="shop.html?cat=chaussures">Chaussures</a>
+      <a href="vendors.html">Tous les vendeurs</a>
+    </div>
+  </div>
 </header>
 
-<main class="vendor-profile-page">
-  <!-- HERO VENDEUR -->
-  <div class="vp-hero">
-    <div class="container">
-      <div class="breadcrumb" style="margin-bottom:20px"><a href="index.html">Accueil</a> › <a href="vendors.html">Vendeurs</a> › <span id="vBreadcrumb">Boutique</span></div>
-      <div class="vp-hero-inner" id="vpHero">
-        <div style="text-align:center;padding:40px;color:var(--text-3)">Chargement…</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PRODUITS DU VENDEUR -->
-  <div class="container">
-    <div class="section-header" style="margin-bottom:32px">
-      <h2 class="section-title">Produits de la boutique</h2>
-      <span id="vpProdCount" style="font-size:14px;color:var(--text-3)"></span>
-    </div>
-    <div class="products-grid" id="vendorProdGrid"></div>
-  </div>
+<main class="vp-page" id="vendorPage">
+  <div class="vp-loading container">Chargement de la boutique…</div>
 </main>
 
-<footer class="footer"><div class="footer-bottom container"><span>© 2025 ModaAfrik</span></div></footer>
+<footer class="footer">
+  <div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2025 ModaAfrik Cameroun</span></div></div>
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
 <script src="assets/js/cart.js" defer></script>
 <script defer>
-const MOCK_VENDORS_MAP = {
-  'usr-002':{storeName:'Wax & Merveilles',storeCity:'Dakar',storeDesc:'Créations uniques en tissu wax authentique du Sénégal.',rating:4.8,totalSales:1250000,productCount:18},
-  'usr-003':{storeName:'Kente Royal',storeCity:'Accra',storeDesc:'Tissus kente et vêtements traditionnels du Ghana.',rating:4.6,totalSales:980000,productCount:12},
-  'usr-004':{storeName:'Mode Guinéenne',storeCity:'Conakry',storeDesc:'Boubous et tenues de cérémonie guinéennes de prestige.',rating:4.7,totalSales:750000,productCount:15},
-  'usr-005':{storeName:'Aso-Oke Palace',storeCity:'Lagos',storeDesc:'Tissus aso-oke et ankara de qualité supérieure du Nigeria.',rating:4.9,totalSales:2100000,productCount:24},
-  'usr-006':{storeName:'Bogolan Chic',storeCity:'Abidjan',storeDesc:'Bogolan et bazin riche, élégance malienne modernisée.',rating:4.5,totalSales:620000,productCount:10},
-};
-const ALL_PRODUCTS = [
-  {id:'prd-001',name:'Robe Wax Soleil d\'Afrique',price:18500,salePrice:null,emoji:'👗',gradient:'linear-gradient(135deg,#e67e22,#f39c12)',badge:'bestseller',rating:4.9,reviewCount:47,vendorId:'usr-002'},
-  {id:'prd-002',name:'Grand Boubou Brodé Prestige',price:45000,salePrice:38000,emoji:'🥻',gradient:'linear-gradient(135deg,#2c3e50,#3498db)',badge:'promo',rating:4.8,reviewCount:32,vendorId:'usr-004'},
-  {id:'prd-003',name:'Ensemble Kente Royale',price:32000,salePrice:null,emoji:'👔',gradient:'linear-gradient(135deg,#27ae60,#f39c12)',badge:'new',rating:4.7,reviewCount:28,vendorId:'usr-003'},
-  {id:'prd-004',name:'Sac Cuir Bogolan Artisan',price:22000,salePrice:19500,emoji:'👜',gradient:'linear-gradient(135deg,#8e44ad,#3498db)',badge:'promo',rating:4.6,reviewCount:19,vendorId:'usr-006'},
-  {id:'prd-005',name:'Collier Perles Yoruba Or',price:15000,salePrice:null,emoji:'💎',gradient:'linear-gradient(135deg,#f39c12,#e74c3c)',badge:'bestseller',rating:4.9,reviewCount:63,vendorId:'usr-005'},
-  {id:'prd-007',name:'Robe Ankara Fleurs Lagos',price:21000,salePrice:17500,emoji:'👗',gradient:'linear-gradient(135deg,#1abc9c,#2980b9)',badge:'promo',rating:4.7,reviewCount:55,vendorId:'usr-005'},
-  {id:'prd-010',name:'Bracelet Or Ashanti',price:85000,salePrice:null,emoji:'💍',gradient:'linear-gradient(135deg,#f7971e,#ffd200)',badge:'premium',rating:5.0,reviewCount:12,vendorId:'usr-003'},
-  {id:'prd-012',name:'Boubou Femme Dentelle Dorée',price:38000,salePrice:null,emoji:'🥻',gradient:'linear-gradient(135deg,#c94b4b,#4b134f)',badge:'premium',rating:4.9,reviewCount:29,vendorId:'usr-004'},
-];
-
 document.addEventListener('DOMContentLoaded', async () => {
-  const vid = new URLSearchParams(location.search).get('id') || 'usr-002';
-  let vendor, products;
-  try {
-    const res = await Api.vendors.get(vid);
-    vendor = res.vendor; products = res.products;
-  } catch {
-    vendor   = MOCK_VENDORS_MAP[vid] || MOCK_VENDORS_MAP['usr-002'];
-    products = ALL_PRODUCTS.filter(p => p.vendorId === vid);
+  const h = document.getElementById('header');
+  window.addEventListener('scroll', () => h?.classList.toggle('scrolled', scrollY > 40), {passive:true});
+  const vid  = new URLSearchParams(location.search).get('id');
+  const page = document.getElementById('vendorPage');
+  if (!vid) { page.innerHTML = notFoundHTML('ID de boutique manquant'); return; }
+
+  let vendor = null, products = [];
+
+  // 1. LocalStore (vendeurs créés via admin ou KYC) — source primaire
+  const approvedVendors = LocalStore.getApprovedVendors();
+  vendor = approvedVendors.find(v => v.id === vid);
+  if (vendor) {
+    products = LocalStore.getApprovedProducts().filter(p => p.vendorId === vid);
   }
-  renderVendor(vendor || {}, products || []);
+
+  // 2. API backend
+  if (!vendor) {
+    try {
+      const res = await Api.vendors.get(vid);
+      if (res.vendor) { vendor = res.vendor; products = res.products || []; }
+    } catch {}
+  }
+
+  if (!vendor) {
+    page.innerHTML = notFoundHTML('Boutique introuvable. Vérifiez le lien ou contactez l\'administrateur.');
+    return;
+  }
+
+  vendor.productCount = products.length;
+  renderVendorPage(vendor, products, page);
 });
 
-function renderVendor(v, products) {
-  document.title = `${v.storeName} — ModaAfrik`;
-  document.getElementById('vBreadcrumb').textContent = v.storeName;
-  document.getElementById('vpProdCount').textContent = `${products.length} produits`;
+function renderVendorPage(v, products, page) {
+  document.title = `${v.storeName} — ModaAfrik Cameroun`;
 
-  document.getElementById('vpHero').innerHTML = `
-  <div class="vp-av">${v.storeName?.[0]||'V'}</div>
-  <div class="vp-meta">
-    <h1>${v.storeName}</h1>
-    <p>${v.storeDesc||''}</p>
-    <div style="font-size:13px;color:var(--text-3)">📍 ${v.storeCity||''}</div>
-    <div class="vp-kpis">
-      <div class="vp-kpi"><strong>★ ${(+v.rating||5).toFixed(1)}</strong><span>Note</span></div>
-      <div class="vp-kpi"><strong>${products.length}</strong><span>Produits</span></div>
-      ${v.totalSales?`<div class="vp-kpi"><strong>${Math.round(v.totalSales/1000)}K FCFA</strong><span>Ventes totales</span></div>`:''}
+  const productsHTML = products.length
+    ? `<div class="products-grid">${products.map(p => {
+        const price = p.salePrice || p.price;
+        const badge = p.badge ? `<span class="product-badge badge-${p.badge}">${{bestseller:'🔥',new:'✨',promo:'💸',premium:'💎'}[p.badge]||''} ${p.badge}</span>` : '';
+        return `<div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+          <div class="product-img">
+            <div class="product-img-bg" style="background:${p.gradient||'linear-gradient(135deg,#e8e0d0,#d4c8b8)'}">${p.emoji||'👗'}</div>
+            ${badge}
+            <div class="product-quick-add" onclick="event.stopPropagation();quickAddVendor('${p.id}')">+ Ajouter au panier</div>
+          </div>
+          <div class="product-body">
+            <div class="product-name">${p.name}</div>
+            <div class="product-price-row"><span class="price-main">${fmtPrice(price)}</span>${p.salePrice?`<span class="price-old">${fmtPrice(p.price)}</span>`:''}</div>
+            <div class="product-rating">${starsHtml(p.rating||0)}<span>(${p.reviewCount||0})</span></div>
+          </div>
+        </div>`;
+      }).join('')}</div>`
+    : `<div style="text-align:center;padding:48px;color:var(--text-3)"><div style="font-size:48px;margin-bottom:12px">👗</div><p>Cette boutique n'a pas encore de produits.</p></div>`;
+
+  page.innerHTML = `
+  <div class="vp-hero">
+    <div class="container">
+      <div class="breadcrumb" style="margin-bottom:20px">
+        <a href="index.html">Accueil</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+        <a href="vendors.html">Vendeurs</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
+        <span>${v.storeName}</span>
+      </div>
+      <div class="vp-inner">
+        <div class="vp-av">${v.storeName?.[0]||'V'}</div>
+        <div class="vp-info">
+          <div class="vp-name">${v.storeName}</div>
+          ${v.storeDesc ? `<div class="vp-desc">${v.storeDesc}</div>` : ''}
+          <div class="vp-meta">
+            ${v.storeCity ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${v.storeCity}</span>` : ''}
+            ${v.storeCategory ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg>${v.storeCategory}</span>` : ''}
+            ${v.storeAddress ? `<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>${v.storeAddress}</span>` : ''}
+          </div>
+          <div class="vp-stats">
+            <div class="vp-stat"><strong>${products.length}</strong><span>Produits</span></div>
+            ${v.rating ? `<div class="vp-stat"><strong>★ ${(+v.rating).toFixed(1)}</strong><span>Note</span></div>` : ''}
+            ${v.totalSales ? `<div class="vp-stat"><strong>${Math.round(v.totalSales/1000)}K</strong><span>FCFA ventes</span></div>` : ''}
+          </div>
+        </div>
+        <div>
+          <a href="shop.html" class="btn-outline btn-sm">← Boutique</a>
+        </div>
+      </div>
     </div>
   </div>
-  <div style="margin-left:auto">
-    <a href="shop.html?vendor=${v.id||''}" class="btn-outline">Tous ses produits</a>
+  <div class="container vp-prods">
+    <h2>Produits de la boutique <span style="font-size:14px;color:var(--text-3);font-weight:400">(${products.length})</span></h2>
+    ${productsHTML}
   </div>`;
 
-  const grid = document.getElementById('vendorProdGrid');
-  if (!products.length) { grid.innerHTML = '<p style="color:var(--text-3);grid-column:1/-1;text-align:center;padding:48px">Aucun produit pour le moment.</p>'; return; }
-
-  grid.innerHTML = products.map(p => {
-    const price = p.salePrice || p.price;
-    const badge = p.badge ? `<span class="product-badge badge-${p.badge}">${{bestseller:'🔥 Best-seller',new:'✨ Nouveau',promo:'💸 Promo',premium:'💎 Premium'}[p.badge]||p.badge}</span>` : '';
-    return `<div class="product-card" onclick="location.href='product.html?id=${p.id}'">
-      <div class="product-img">
-        <div class="product-img-bg" style="background:${p.gradient||'linear-gradient(135deg,#12121f,#1a0a2e)'}">${p.emoji||'👗'}</div>
-        ${badge}
-        <div class="product-quick-add" onclick="event.stopPropagation();addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})">+ Ajouter au panier</div>
-      </div>
-      <div class="product-body">
-        <div class="product-name">${p.name}</div>
-        <div class="product-price-row"><span class="price-main">${fmtPrice(price)}</span>${p.salePrice?`<span class="price-old">${fmtPrice(p.price)}</span>`:''}</div>
-        <div class="product-rating"><span class="stars">${starsHtml(p.rating||0)}</span><span>(${p.reviewCount||0})</span></div>
-      </div>
-    </div>`;
-  }).join('');
+  // GSAP entrance
+  if (window.gsap) {
+    gsap.from('.vp-inner', {opacity:0, y:20, duration:.5, ease:'power3.out'});
+    gsap.from('.product-card', {opacity:0, y:24, duration:.4, stagger:.06, ease:'power3.out', delay:.2});
+  }
 }
 
-function addToCart(p) { Cart.add(p,1,p.sizes?.[0]||'',p.colors?.[0]||''); }
+function notFoundHTML(msg) {
+  return `<div class="container vp-not-found">
+    <div style="font-size:56px;margin-bottom:16px">🏪</div>
+    <h2>Boutique introuvable</h2>
+    <p style="color:var(--text-2);margin-bottom:24px">${msg}</p>
+    <a href="vendors.html" class="btn-primary">← Voir tous les vendeurs</a>
+  </div>`;
+}
+
+function quickAddVendor(id) {
+  const p = LocalStore.getApprovedProducts().find(x => x.id === id);
+  if (p) Cart.add(p, 1, p.sizes?.[0]||'', p.colors?.[0]||'');
+}
 </script>
 </body>
 </html>
