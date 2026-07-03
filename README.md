@@ -1,63 +1,60 @@
-# ModaAfrik — Marketplace de Mode Camerounaise
+# ModaAfrik Cameroun — Marketplace de Mode
 
-Plateforme e-commerce marketplace dédiée à la mode camerounaise.
+## Déploiement
 
-## Stack technique
-- **Frontend** : HTML5, CSS3, JavaScript vanilla, GSAP 3
-- **Backend** : Node.js + Express (API REST)
-- **Stockage** : In-memory (dev) / localStorage (frontend)
-
-## Structure
-```
-pg-ecomerce/
-├── index.html              # Accueil
-├── shop.html               # Catalogue
-├── product.html            # Fiche produit
-├── cart.html               # Panier
-├── checkout.html           # Tunnel paiement (3 étapes)
-├── auth.html               # Connexion / Inscription clients
-├── vendor-setup.html       # Activation compte vendeur (KYC)
-├── vendor-dashboard.html   # Dashboard vendeur
-├── admin.html              # Super Admin
-├── assets/
-│   ├── css/                # Styles (main, home, shop, product, checkout, dashboard, admin, auth)
-│   └── js/                 # Scripts (api, cart, data, home, shop, product, checkout, auth, dashboard, admin, vendor-setup)
-└── backend/
-    ├── server.js           # Express API
-    ├── routes/             # auth, products, orders, vendors, categories, cart, upload
-    ├── middleware/         # auth JWT, upload multer
-    └── data/               # db.js, products.js, orders.js
-```
-
-## Démarrage backend
+### 1. Backend Node.js
 ```bash
 cd backend
 npm install
-cp .env.example .env
-npm run dev   # port 3001
+cp .env.example .env   # Remplir les clés API
+node server.js         # Port 3001
 ```
 
-## Sécurité & Rôles
-| Rôle    | Accès                                      |
-|---------|--------------------------------------------|
-| Admin   | admin.html — gestion complète du site      |
-| Vendeur | vendor-dashboard.html — via invitation KYC |
-| Client  | auth.html — inscription publique           |
+### 2. Frontend
+- Configurer `assets/js/api.js` avec l'URL de votre backend
+- Héberger les fichiers HTML/CSS/JS sur votre hébergeur
 
-### Flux vendeur (KYC obligatoire)
-1. Admin génère un code d'invitation → envoie le lien au futur vendeur
-2. Vendeur remplit le formulaire KYC (CNI recto/verso + selfies en direct)
-3. Admin valide le dossier → compte activé
-4. Vendeur soumet ses produits → Admin approuve → visible sur la vitrine
+---
 
-## Paiements (Cameroun)
-- Orange Money (+237)
-- MTN MoMo (+237)
-- CinetPay
-- FedaPay
+## Paiements — Configuration
 
-## Connexion admin
-```
-Email    : admin@modaafrik.cm
-Password : ModaAfrik@Admin2025!
-```
+### Orange Money Cameroun
+1. Créer un compte sur https://developer.orange.com
+2. Créer une application Orange Money Webpay CM
+3. Récupérer `client_id` et `client_secret`
+4. Dans `.env` : `ORANGE_MONEY_TOKEN=client_id:client_secret` (en base64)
+
+### MTN Mobile Money Cameroun  
+1. S'inscrire sur https://momodeveloper.mtn.com
+2. Souscrire au produit "Collection"
+3. Créer un utilisateur API via Postman ou la sandbox
+4. Dans `.env` : remplir `MTN_MOMO_API_KEY`, `MTN_MOMO_USER_ID`, `MTN_MOMO_API_SECRET`
+
+### CinetPay
+1. Créer un compte marchand sur https://cinetpay.com
+2. Aller dans Paramètres → API
+3. Copier `API Key` et `Site ID`
+4. Dans `.env` : `CINETPAY_API_KEY` et `CINETPAY_SITE_ID`
+
+### FedaPay
+1. Créer un compte sur https://fedapay.com
+2. Dashboard → API Keys → Copier la clé Live
+3. Dans `.env` : `FEDAPAY_SECRET_KEY=sk_live_...`
+
+### Mode Simulation (sans clés API)
+Si les clés ne sont pas configurées, le backend renvoie une simulation pour tester le flux sans paiement réel.
+
+---
+
+## Compte Admin
+- Email    : `admin@modaafrik.cm`
+- Password : `ModaAfrik@Admin2025!`
+- URL      : `/admin.html`
+
+## Persistance données
+Les données sont sauvegardées dans `backend/data/json/*.json` :
+- `users.json` — Utilisateurs + vendeurs
+- `products.json` — Produits publiés
+- `orders.json` — Commandes
+- `reviews.json` — Avis
+- `vendors_pending.json` — Dossiers KYC en attente

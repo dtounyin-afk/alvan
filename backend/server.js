@@ -88,13 +88,14 @@ app.get('/api/health', (req, res) => {
 });
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/products', require('./routes/products'));
-app.use('/api/orders', require('./routes/orders'));
-app.use('/api/vendors', require('./routes/vendors'));
-app.use('/api/categories', require('./routes/categories'));
-app.use('/api/cart', require('./routes/cart'));
-app.use('/api/upload', require('./routes/upload'));
+app.use('/api/auth',       require('./routes/auth'));
+app.use('/api/products',  require('./routes/products'));
+app.use('/api/orders',    require('./routes/orders'));
+app.use('/api/vendors',   require('./routes/vendors'));
+app.use('/api/categories',require('./routes/categories'));
+app.use('/api/cart',      require('./routes/cart'));
+app.use('/api/upload',    require('./routes/upload'));
+app.use('/api/payment',   require('./routes/payment'));
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req, res) => {

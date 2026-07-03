@@ -177,18 +177,188 @@ function renderSummary() {
 
 /* ── TRAITEMENT PAIEMENT ── */
 async function processPayment() {
-  // Cash on pickup : pas de validation de paiement en ligne
-  if (paymentMethod !== 'cash_on_pickup') {
+  // Cash on pickup : pas de paiement en ligne
+  if (paymentMethod === 'cash_on_pickup') {
+    if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
+  } else {
     if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
     if (!paymentMethod) { showToast('Choisissez une méthode de paiement', 'error'); return; }
-    if (paymentMethod === 'orange_money' || paymentMethod === 'mtn_momo') {
+    if (['orange_money','mtn_momo'].includes(paymentMethod)) {
       const phone = document.getElementById('mmPhone')?.value.trim();
-      if (!phone || !phone.startsWith('+237')) { showToast('Entrez un numéro camerounais valide (+237 6XX XXX XXX)', 'error'); return; }
+      if (!phone || phone.length < 8) { showToast('Entrez un numéro de téléphone valide (+237 6XX XXX XXX)', 'error'); return; }
     }
-  } else {
-    // Cash : juste vérifier les CGV
-    if (!document.getElementById('cgv')?.checked) { showToast('Veuillez accepter les conditions générales', 'error'); return; }
   }
+
+  const btn = document.getElementById('btnPay');
+  const txt = document.getElementById('btnPayTxt');
+  if (btn) btn.disabled = true;
+  if (txt) txt.textContent = 'Traitement en cours…';
+
+  const items      = Cart.get();
+  const sub        = Cart.subtotal();
+  const total      = sub + deliveryCost;
+  const orderRef   = 'MA-' + Date.now();
+  const user       = Auth.user();
+
+  const payload = {
+    items: items.map(i => ({ productId:i.productId, qty:i.qty, size:i.size, color:i.color, name:i.name, price:i.price, emoji:i.emoji, gradient:i.gradient, vendorId:i.vendorId })),
+    deliveryOption, deliveryCity, deliveryCost,
+    subtotal: sub, total,
+    paymentMethod, orderRef,
+    firstName: document.getElementById('ckFirstName')?.value || user?.firstName || '',
+    lastName:  document.getElementById('ckLastName')?.value  || user?.lastName  || '',
+    email:     document.getElementById('ckEmail')?.value     || user?.email     || '',
+    phone:     document.getElementById('ckPhone')?.value     || user?.phone     || '',
+    address:   document.getElementById('ckAddress')?.value   || '',
+    city:      document.getElementById('ckCity')?.value      || deliveryCity   || '',
+    customerId:user?.id || 'guest',
+    status:    paymentMethod === 'cash_on_pickup' ? 'pending' : 'awaiting_payment',
+    commission: Math.round(sub * 0.10),
+    vendorAmount: Math.round(sub * 0.90),
+  };
+
+  // ── Paiement en ligne ──
+  if (paymentMethod !== 'cash_on_pickup') {
+    try {
+      let payResult = null;
+
+      if (paymentMethod === 'orange_money') {
+        const phone = document.getElementById('mmPhone')?.value.trim();
+        payResult = await Api.post('/payment/orange-money/initiate', { phone, amount:total, orderRef, description:'Commande ModaAfrik '+orderRef });
+        if (payResult.success && !payResult.simulated && payResult.paymentUrl) {
+          // Sauvegarder commande avant redirection
+          saveOrderLocally(payload, orderRef);
+          window.location.href = payResult.paymentUrl;
+          return;
+        }
+        if (payResult.simulated) showToast('⚠️ Mode test Orange Money — Vérifiez vos clés API', 'default', 6000);
+      }
+
+      else if (paymentMethod === 'mtn_momo') {
+        const phone = document.getElementById('mmPhone')?.value.trim();
+        payResult = await Api.post('/payment/mtn-momo/initiate', { phone, amount:total, orderRef, description:'Commande ModaAfrik '+orderRef });
+        if (payResult.success) {
+          if (payResult.simulated) showToast('⚠️ Mode test MTN MoMo', 'default', 4000);
+          else {
+            showToast('📱 Notification envoyée sur votre téléphone. Validez le paiement.', 'success', 8000);
+            // Attendre confirmation (polling)
+            await waitMTNConfirmation(payResult.referenceId, orderRef, payload, btn, txt);
+            return;
+          }
+        }
+      }
+
+      else if (paymentMethod === 'cinetpay') {
+        payResult = await Api.post('/payment/cinetpay/initiate', {
+          amount: total, orderRef,
+          customerName:  (payload.firstName + ' ' + payload.lastName).trim(),
+          customerEmail: payload.email, customerPhone: payload.phone,
+          description:   'Commande ModaAfrik ' + orderRef,
+        });
+        if (payResult.success && !payResult.simulated && payResult.paymentUrl) {
+          saveOrderLocally(payload, orderRef);
+          window.open(payResult.paymentUrl, '_blank');
+          // Afficher instruction
+          document.getElementById('confirmMsg').textContent = 'Complétez le paiement dans l\'onglet CinetPay qui vient de s\'ouvrir.';
+          finalizeOrder(orderRef, payload);
+          return;
+        }
+        if (payResult.simulated) showToast('⚠️ Mode test CinetPay', 'default', 4000);
+      }
+
+      else if (paymentMethod === 'fedapay') {
+        payResult = await Api.post('/payment/fedapay/initiate', {
+          amount: total, orderRef,
+          customerFirstname: payload.firstName, customerLastname: payload.lastName,
+          customerEmail: payload.email, customerPhone: payload.phone,
+        });
+        if (payResult.success && !payResult.simulated && payResult.paymentUrl) {
+          saveOrderLocally(payload, orderRef);
+          window.open(payResult.paymentUrl, '_blank');
+          document.getElementById('confirmMsg').textContent = 'Complétez le paiement dans l\'onglet FedaPay qui vient de s\'ouvrir.';
+          finalizeOrder(orderRef, payload);
+          return;
+        }
+        if (payResult.simulated) showToast('⚠️ Mode test FedaPay', 'default', 4000);
+      }
+    } catch (e) {
+      console.warn('[Payment] API error, continuing locally:', e.message);
+    }
+  }
+
+  // Finaliser la commande
+  finalizeOrder(orderRef, payload);
+}
+
+async function waitMTNConfirmation(referenceId, orderRef, payload, btn, txt) {
+  const MAX_TRIES = 12; // 60 secondes
+  let tries = 0;
+  if (txt) txt.textContent = 'En attente de confirmation MTN…';
+
+  const check = async () => {
+    tries++;
+    try {
+      const r = await Api.get('/payment/mtn-momo/status/' + referenceId);
+      if (r.status === 'SUCCESSFUL') {
+        finalizeOrder(orderRef, payload);
+        return;
+      } else if (r.status === 'FAILED') {
+        if (btn) btn.disabled = false;
+        if (txt) txt.textContent = 'Confirmer la commande';
+        showToast('Paiement MTN échoué. Réessayez.', 'error');
+        return;
+      }
+    } catch {}
+    if (tries < MAX_TRIES) {
+      setTimeout(check, 5000);
+    } else {
+      // Timeout — on laisse quand même finaliser avec statut "pending"
+      showToast('Délai dépassé. La commande sera confirmée à réception du paiement.', 'default', 6000);
+      finalizeOrder(orderRef, payload);
+    }
+  };
+  setTimeout(check, 5000);
+}
+
+function saveOrderLocally(payload, orderRef) {
+  const orders = JSON.parse(localStorage.getItem('ma_client_orders') || '[]');
+  orders.unshift({ ...payload, id:orderRef, orderNumber:orderRef, createdAt:new Date().toISOString() });
+  localStorage.setItem('ma_client_orders', JSON.stringify(orders));
+}
+
+function finalizeOrder(orderRef, payload) {
+  // Sauvegarder commande
+  const items = Cart.get();
+  const orderData = {
+    ...payload, id:orderRef, orderNumber:orderRef,
+    items: items.length ? items : payload.items,
+    status: paymentMethod === 'cash_on_pickup' ? 'pending' : 'processing',
+    createdAt: new Date().toISOString(),
+  };
+
+  // Via API
+  Auth.isLoggedIn() && Api.orders.create(payload).catch(() => {});
+
+  // Local
+  const orders = JSON.parse(localStorage.getItem('ma_client_orders') || '[]');
+  if (!orders.find(o => o.id === orderRef)) orders.unshift(orderData);
+  localStorage.setItem('ma_client_orders', JSON.stringify(orders));
+
+  Cart.clear();
+
+  // Afficher confirmation
+  const modal = document.getElementById('confirmModal');
+  const onEl  = document.getElementById('orderNum');
+  const pmEl  = document.getElementById('payMethodConfirm');
+  if (modal) modal.classList.remove('hidden');
+  if (onEl)  onEl.textContent  = orderRef;
+  if (pmEl)  pmEl.textContent  = payMethodLabel(paymentMethod);
+
+  const btn = document.getElementById('btnPay');
+  const txt = document.getElementById('btnPayTxt');
+  if (btn) { btn.disabled = false; }
+  if (txt) { txt.textContent = 'Confirmer la commande'; }
+}
 
   const btn = document.getElementById('btnPay');
   if (btn) { btn.disabled = true; btn.querySelector('#btnPayTxt').textContent = 'Traitement en cours…'; }
