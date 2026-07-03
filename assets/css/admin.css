@@ -1,66 +1,175 @@
 /* ================================================================
-   MODAAFRIK — ADMIN (extends dashboard.css)
+   MODAAFRIK — SUPER ADMIN CSS
    ================================================================ */
-.admin-sec { display:block }
-.admin-sec.hidden { display:none !important }
 
-/* Commission chart */
+/* ── PAGE D'ACCÈS REFUSÉ (affichée si pas admin) ── */
+.admin-blocked {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--bg); flex-direction: column; gap: 16px; text-align: center; padding: 40px;
+}
+.admin-blocked-icon { font-size: 64px; }
+.admin-blocked h2 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:var(--text); }
+.admin-blocked p  { font-size:14px; color:var(--text-2); }
+
+/* ── BADGE ADMIN TOPBAR ── */
+.admin-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: var(--r-full);
+  background: #fef2f2; color: #991b1b;
+  border: 1px solid #fca5a5;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.admin-badge svg { width: 12px; height: 12px; }
+
+/* ── SECTIONS ── */
+.admin-sec         { display: block; }
+.admin-sec.hidden  { display: none !important; }
+
+/* ── STAT CARDS ADMIN (couleurs accent plus forte) ── */
+.admin-stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); padding: 20px;
+  display: flex; gap: 14px; align-items: center;
+  box-shadow: var(--shadow-card); transition: var(--t-med);
+}
+.admin-stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.asi-icon {
+  width: 52px; height: 52px; border-radius: var(--r-md);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.asi-icon svg { width: 24px; height: 24px; }
+.asi-label  { font-size: 11px; color: var(--text-3); text-transform: uppercase; letter-spacing:.6px; display:block; }
+.asi-value  { font-family:'Syne',sans-serif; font-size: 24px; font-weight: 800; color: var(--text); display: block; margin: 3px 0; }
+.asi-sub    { font-size: 11px; color: var(--text-3); }
+.asi-sub.up { color: var(--green); }
+.asi-sub.warn { color: #f59e0b; }
+
+/* ── GRAPHIQUE COMMISSIONS ── */
 .admin-comm-chart {
-  height: 160px; display: flex; align-items: flex-end; gap: 6px; padding: 8px 0;
+  height: 160px; display: flex; align-items: flex-end;
+  gap: 6px; padding: 8px 0 28px;
 }
 .admin-comm-bar {
-  flex: 1; border-radius: 4px 4px 0 0; min-width: 20px;
-  background: linear-gradient(to top, rgba(200,144,42,.4), rgba(200,144,42,.8));
-  transition: var(--t-med); position: relative; cursor: pointer;
+  flex: 1; border-radius: 4px 4px 0 0; min-width: 20px; cursor: pointer;
+  background: linear-gradient(to top, rgba(200,144,42,.35), rgba(200,144,42,.75));
+  transition: var(--t-med); position: relative;
 }
 .admin-comm-bar:hover { background: var(--grad-gold); }
-.admin-comm-bar .bar-tip {
+.bar-tip {
   position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
   background: var(--text); color: var(--bg); font-size: 10px; font-weight: 700;
-  padding: 3px 7px; border-radius: 4px; white-space: nowrap; display: none;
+  padding: 3px 8px; border-radius: 4px; white-space: nowrap; display: none; pointer-events: none;
 }
 .admin-comm-bar:hover .bar-tip { display: block; }
 .bar-label {
-  position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--text-3); white-space: nowrap;
+  position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--text-3); white-space: nowrap; font-weight: 600;
 }
 
-/* Vendor pending card */
+/* ── DOSSIERS KYC EN ATTENTE ── */
 .pending-vendor-row {
-  display: flex; align-items: center; gap: 12px; padding: 12px 0;
-  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 0; border-bottom: 1px solid var(--border);
 }
-.pending-vendor-row:last-child { border: none; }
+.pending-vendor-row:last-child { border: none; padding-bottom: 0; }
 .pv-av {
-  width: 38px; height: 38px; border-radius: 50%; background: var(--text);
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--text); flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px; color: var(--bg); flex-shrink: 0;
+  font-family:'Syne',sans-serif; font-weight: 800; font-size: 14px; color: var(--bg);
 }
-.pv-info { flex: 1; }
-.pv-name { font-weight: 700; font-size: 14px; }
-.pv-city { font-size: 12px; color: var(--text-3); }
-.pv-date { font-size: 11px; color: var(--text-3); }
-.pv-actions { display: flex; gap: 6px; }
+.pv-info  { flex: 1; min-width: 0; }
+.pv-name  { font-weight: 700; font-size: 14px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pv-city  { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+.pv-date  { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+.pv-actions { display: flex; gap: 6px; flex-shrink: 0; }
 
-/* Status badges */
-.sbadge-active    { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.sbadge-pending   { background: #fff8e1; color: #92400e; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
-.sbadge-suspended { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+/* ── BADGES STATUT ── */
+.sbadge-active {
+  background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;
+  padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.sbadge-pending {
+  background: #fff8e1; color: #92400e; border: 1px solid #fde68a;
+  padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.sbadge-suspended {
+  background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5;
+  padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.sbadge-kyc {
+  background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe;
+  padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+}
 
-/* Cities list */
+/* ── TABLEAU ADMIN ── */
+.admin-table-wrap { overflow-x: auto; border-radius: var(--r-lg); }
+.admin-table {
+  width: 100%; border-collapse: collapse; font-size: 13px; min-width: 600px;
+}
+.admin-table th {
+  background: var(--bg-2); font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .6px; color: var(--text-3); padding: 11px 14px; text-align: left;
+  border-bottom: 2px solid var(--border); white-space: nowrap;
+}
+.admin-table td {
+  padding: 12px 14px; border-bottom: 1px solid var(--border);
+  vertical-align: middle; color: var(--text);
+}
+.admin-table tr:last-child td { border: none; }
+.admin-table tbody tr:hover td { background: var(--bg-2); }
+.admin-table .td-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+
+/* Surlignade ligne en attente */
+.admin-table tr.row-pending td { background: #fffbf0; }
+.admin-table tr.row-pending:hover td { background: #fef3c7; }
+
+/* ── INVITATIONS ── */
+.invite-token {
+  font-family: monospace; font-weight: 700; font-size: 14px;
+  letter-spacing: 3px; color: var(--text); background: var(--bg-2);
+  padding: 2px 8px; border-radius: 4px; display: inline-block;
+}
+
+/* ── VILLES DE LIVRAISON ── */
 .city-row {
-  display: flex; align-items: center; gap: 10px; padding: 8px 0;
-  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--border);
 }
 .city-row:last-child { border: none; }
-.city-name { flex: 1; font-size: 14px; font-weight: 600; }
-.city-price { width: 120px; }
+.city-name  { flex: 1; font-size: 14px; font-weight: 600; color: var(--text); }
+.city-price { width: 130px; }
 .city-price input {
-  width: 100%; padding: 6px 10px;
+  width: 100%; padding: 7px 10px;
   border: 1.5px solid var(--border); border-radius: var(--r-sm);
   background: var(--surface); color: var(--text); font-size: 13px; outline: none;
+  font-weight: 600; text-align: center;
 }
+.city-price input:focus { border-color: var(--gold-2); }
 
-@media (max-width: 1024px) {
-  #asec-settings > div { grid-template-columns: 1fr; }
+/* ── KYC MODAL ── */
+.kyc-docs-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
+}
+.kyc-doc-item {
+  padding: 10px 12px; border-radius: var(--r-md); font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+.kyc-doc-ok   { background: #ecfdf5; color: #065f46; }
+.kyc-doc-miss { background: #fef2f2; color: #991b1b; }
+.kyc-doc-item svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── PAYMENT BADGES ── */
+.pm-badge-om  { padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#FF660015;color:#FF6600;border:1px solid #FF660030; }
+.pm-badge-mtn { padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#FFCC0020;color:#b45309;border:1px solid #FFCC0040; }
+.pm-badge-cp  { padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#00308715;color:#003087;border:1px solid #00308730; }
+.pm-badge-fp  { padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700;background:#00875A15;color:#00875A;border:1px solid #00875A30; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 768px) {
+  #asec-settings > div,
+  #asec-commissions > div { grid-template-columns: 1fr; }
 }

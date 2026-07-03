@@ -154,10 +154,72 @@ const LocalStore = {
 };
 
 /* ── INIT ── */
-document.addEventListener('DOMContentLoaded', () => { Cart.updateBadge(); initStickyHeader(); });
+document.addEventListener('DOMContentLoaded', () => {
+  Cart.updateBadge();
+  initStickyHeader();
+  initUserMenu();
+});
 window.Cart = Cart;
 window.Auth = Auth;
 window.LocalStore = LocalStore;
 window.showToast  = showToast;
 window.fmtPrice   = fmtPrice;
 window.starsHtml  = starsHtml;
+
+/* ── USER MENU (header) ── */
+function initUserMenu() {
+  const u = Auth.user();
+  // Chercher tous les liens "compte" dans le header
+  const accountLinks = document.querySelectorAll('a[href="auth.html"].nav-icon, a[title="Compte"].nav-icon, a[title="Mon compte"].nav-icon');
+
+  accountLinks.forEach(link => {
+    if (u) {
+      // Remplacer le lien par un bouton avec menu déroulant
+      const initials = (u.firstName?.[0] || '') + (u.lastName?.[0] || '');
+      const wrapper  = document.createElement('div');
+      wrapper.className = 'user-menu-wrap';
+      wrapper.innerHTML = `
+        <button class="nav-icon user-menu-btn" onclick="toggleUserMenu(this)" title="${u.firstName} ${u.lastName}">
+          <span class="user-initials">${initials.toUpperCase() || '?'}</span>
+        </button>
+        <div class="user-dropdown" style="display:none">
+          <div class="ud-header">
+            <div class="ud-initials">${initials.toUpperCase() || '?'}</div>
+            <div>
+              <div class="ud-name">${u.firstName} ${u.lastName}</div>
+              <div class="ud-role">${roleLabel(u.role)}</div>
+            </div>
+          </div>
+          <div class="ud-divider"></div>
+          ${u.role === 'admin'  ? `<a href="admin.html" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Panneau admin</a>` : ''}
+          ${u.role === 'vendor' ? `<a href="vendor-dashboard.html" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Mon dashboard</a>` : ''}
+          ${u.role === 'client' ? `<a href="#" class="ud-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>Mes commandes</a>` : ''}
+          <div class="ud-divider"></div>
+          <button class="ud-item ud-logout" onclick="Auth.logout()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Se déconnecter
+          </button>
+        </div>`;
+      link.parentNode.replaceChild(wrapper, link);
+    }
+  });
+
+  // Fermer le menu si clic ailleurs
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.user-menu-wrap')) {
+      document.querySelectorAll('.user-dropdown').forEach(d => d.style.display = 'none');
+    }
+  });
+}
+
+function toggleUserMenu(btn) {
+  const dropdown = btn.nextElementSibling;
+  if (!dropdown) return;
+  const isOpen = dropdown.style.display !== 'none';
+  document.querySelectorAll('.user-dropdown').forEach(d => d.style.display = 'none');
+  dropdown.style.display = isOpen ? 'none' : 'block';
+}
+
+function roleLabel(role) {
+  return { admin:'Super Administrateur', vendor:'Vendeur', client:'Client' }[role] || role;
+}
