@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Super Admin — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/admin.css"/>
+</head>
+<body class="dash-body">
+
+<!-- SIDEBAR ADMIN -->
+<aside class="dash-sidebar" id="adminSidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/></svg></div>
+      ModaAfrik
+    </div>
+    <button class="sidebar-close" onclick="toggleSidebar()">✕</button>
+  </div>
+  <div class="sidebar-vendor">
+    <div class="dash-vendor-av" style="background:linear-gradient(135deg,#ef4444,#dc2626)">A</div>
+    <div>
+      <div class="dash-vendor-name">Super Administrateur</div>
+      <div class="dash-vendor-status" style="color:#f87171">● Admin</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="sidebar-link active" onclick="showAdmin('overview',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+      Vue d'ensemble
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('vendors',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+      Vendeurs
+      <span class="sl-badge" id="pendingVendorsBadge" style="background:var(--gold)">0</span>
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('products',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></span>
+      Produits
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('orders',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
+      Commandes
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('users',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span>
+      Utilisateurs
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('payments',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+      Paiements
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('commissions',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+      Commissions
+    </button>
+    <button class="sidebar-link" onclick="showAdmin('settings',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      Paramètres site
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html" class="sidebar-link"><span class="sl-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>Voir le site</a>
+    <button class="sidebar-link logout" onclick="Auth.logout()"><span class="sl-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>Déconnexion</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="dash-main">
+  <div class="dash-topbar">
+    <button class="topbar-menu" onclick="toggleSidebar()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div id="adminTitle" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text)">Vue d'ensemble</div>
+    <div class="topbar-right">
+      <span style="font-size:12px;padding:4px 12px;background:#fef2f2;color:#991b1b;border-radius:var(--r-full);font-weight:700;border:1px solid #fca5a5">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        SUPER ADMIN
+      </span>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- ═══ VUE D'ENSEMBLE ═══ -->
+    <div class="admin-sec" id="asec-overview">
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+        <div class="stat-card"><div class="stat-icon" style="background:#fff8e1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><span class="stat-info-lbl">Revenus totaux (FCFA)</span><strong class="stat-num" id="aRevTotal">—</strong><div class="stat-sub up">Commission plateforme (10%)</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#ecfdf5"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg></div><div><span class="stat-info-lbl">Vendeurs actifs</span><strong class="stat-num" id="aVendors">—</strong><div class="stat-sub" id="aPendingVendors">— en attente</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#eff6ff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/></svg></div><div><span class="stat-info-lbl">Produits publiés</span><strong class="stat-num" id="aProducts">—</strong><div class="stat-sub">actifs</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#fdf4ff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div><span class="stat-info-lbl">Commandes totales</span><strong class="stat-num" id="aOrders">—</strong><div class="stat-sub">ce mois</div></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="dash-card">
+          <div class="dash-card-head"><h3>Commissions du mois</h3></div>
+          <div class="admin-comm-chart" id="adminChart"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-head"><h3>Vendeurs en attente</h3><button class="btn-ghost btn-sm" onclick="showAdmin('vendors',null)">Tout voir →</button></div>
+          <div id="pendingVendorsList"></div>
+        </div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head"><h3>Dernières commandes</h3><button class="btn-ghost btn-sm" onclick="showAdmin('orders',null)">Tout voir →</button></div>
+        <div style="overflow-x:auto"><table class="orders-table" id="adminRecentOrders"></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ VENDEURS ═══ -->
+    <div class="admin-sec hidden" id="asec-vendors">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Gestion des vendeurs</h2>
+        <div style="display:flex;gap:10px">
+          <button class="size-tag active" onclick="filterVendorsAdmin('all',this)" id="vf-all">Tous</button>
+          <button class="size-tag" onclick="filterVendorsAdmin('pending',this)">En attente</button>
+          <button class="size-tag" onclick="filterVendorsAdmin('active',this)">Actifs</button>
+          <button class="size-tag" onclick="filterVendorsAdmin('suspended',this)">Suspendus</button>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table class="orders-table" id="vendorsAdminTable"></table></div>
+    </div>
+
+    <!-- ═══ PRODUITS ═══ -->
+    <div class="admin-sec hidden" id="asec-products">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Gestion des produits</h2>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="text" placeholder="Rechercher un produit…" oninput="filterProductsAdmin(this.value)" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);font-size:13px;outline:none;color:var(--text);width:220px"/>
+        </div>
+      </div>
+      <div style="overflow-x:auto"><table class="orders-table" id="productsAdminTable"></table></div>
+    </div>
+
+    <!-- ═══ COMMANDES ═══ -->
+    <div class="admin-sec hidden" id="asec-orders">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Toutes les commandes</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <button class="size-tag active" onclick="filterOrdersAdmin('all',this)">Toutes</button>
+        <button class="size-tag" onclick="filterOrdersAdmin('pending',this)">En attente</button>
+        <button class="size-tag" onclick="filterOrdersAdmin('processing',this)">En préparation</button>
+        <button class="size-tag" onclick="filterOrdersAdmin('shipped',this)">Expédiées</button>
+        <button class="size-tag" onclick="filterOrdersAdmin('delivered',this)">Livrées</button>
+      </div>
+      <div style="overflow-x:auto"><table class="orders-table" id="ordersAdminTable"></table></div>
+    </div>
+
+    <!-- ═══ UTILISATEURS ═══ -->
+    <div class="admin-sec hidden" id="asec-users">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Utilisateurs inscrits</h2>
+      <div style="overflow-x:auto"><table class="orders-table" id="usersAdminTable"></table></div>
+    </div>
+
+    <!-- ═══ PAIEMENTS ═══ -->
+    <div class="admin-sec hidden" id="asec-payments">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Paiements &amp; Transactions</h2>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+        <div class="stat-card"><div class="stat-icon" style="background:#FF660020"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#FF6600"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">OM</text></svg></div><div><span class="stat-info-lbl">Orange Money</span><strong class="stat-num" id="omTotal">—</strong><div class="stat-sub">transactions</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#FFCC0020"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#FFCC00"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-size="8" font-weight="800" fill="#000">MTN</text></svg></div><div><span class="stat-info-lbl">MTN MoMo</span><strong class="stat-num" id="mtnTotal">—</strong><div class="stat-sub">transactions</div></div></div>
+        <div class="stat-card"><div class="stat-icon" style="background:#00308720"><svg width="22" height="22" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#003087"/><text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">CP/FP</text></svg></div><div><span class="stat-info-lbl">CinetPay / FedaPay</span><strong class="stat-num" id="cardTotal">—</strong><div class="stat-sub">transactions</div></div></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head"><h3>Historique des transactions</h3></div>
+        <div style="overflow-x:auto"><table class="orders-table" id="paymentsTable"></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ COMMISSIONS ═══ -->
+    <div class="admin-sec hidden" id="asec-commissions">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Gestion des commissions</h2>
+      <div class="dash-card" style="max-width:480px;margin-bottom:24px">
+        <h3>Taux de commission global</h3>
+        <p style="font-size:14px;color:var(--text-2);margin-bottom:16px">Ce taux s'applique à toutes les ventes de la plateforme. Modifiable par vendeur individuellement.</p>
+        <div style="display:flex;align-items:center;gap:12px">
+          <input type="number" id="commRate" value="10" min="1" max="30" style="width:80px;padding:10px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);font-size:18px;font-weight:700;text-align:center;outline:none;color:var(--text)"/>
+          <span style="font-size:20px;font-weight:700;color:var(--text)">%</span>
+          <button class="btn-primary" onclick="saveCommRate()">Sauvegarder</button>
+        </div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head"><h3>Commissions par vendeur</h3></div>
+        <div style="overflow-x:auto"><table class="orders-table" id="commTable"></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ PARAMÈTRES SITE ═══ -->
+    <div class="admin-sec hidden" id="asec-settings">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Paramètres du site</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="dash-card">
+          <h3>Informations plateforme</h3>
+          <div class="form-group"><label>Nom du site</label><input type="text" value="ModaAfrik Cameroun"/></div>
+          <div class="form-group"><label>Email contact</label><input type="email" value="contact@modaafrik.cm"/></div>
+          <div class="form-group"><label>Téléphone support</label><input type="tel" value="+237 6XX XXX XXX"/></div>
+          <div class="form-group"><label>Adresse (Cameroun)</label><input type="text" value="Douala, Cameroun"/></div>
+          <button class="btn-primary" onclick="showToast('Paramètres sauvegardés','success')">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+            Sauvegarder
+          </button>
+        </div>
+        <div class="dash-card">
+          <h3>Configuration paiements</h3>
+          <div class="form-group"><label>Orange Money — API Key</label><input type="password" placeholder="Clé API Orange CM"/></div>
+          <div class="form-group"><label>MTN MoMo — API Key</label><input type="password" placeholder="Clé API MTN CM"/></div>
+          <div class="form-group"><label>CinetPay — API Key</label><input type="password" placeholder="Clé API CinetPay"/></div>
+          <div class="form-group"><label>FedaPay — API Key</label><input type="password" placeholder="Clé API FedaPay"/></div>
+          <button class="btn-primary" onclick="showToast('Clés API sauvegardées','success')">Sauvegarder</button>
+        </div>
+
+        <!-- INVITATIONS VENDEURS -->
+        <div class="dash-card" style="grid-column:1/-1" id="invitationsSection"></div>
+
+        <div class="dash-card">
+          <h3>Villes de livraison (Cameroun)</h3>
+          <p style="font-size:13px;color:var(--text-2);margin-bottom:14px">Tarifs de livraison interurbaine.</p>
+          <div id="citiesAdmin" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto"></div>
+        </div>
+        <div class="dash-card">
+          <h3>Accès administrateur</h3>
+          <div class="form-group"><label>Email admin</label><input type="email" value="admin@modaafrik.cm" readonly style="background:var(--bg-2)"/></div>
+          <div class="form-group"><label>Nouveau mot de passe admin</label><input type="password" placeholder="Laisser vide pour ne pas changer"/></div>
+          <button class="btn-primary" onclick="showToast('Accès mis à jour','success')">Mettre à jour</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.dash-content -->
+</div><!-- /.dash-main -->
+
+<!-- MODAL CONFIRMATION VENDEUR -->
+<div class="modal-overlay hidden" id="vendorModal">
+  <div class="modal-box" style="text-align:left">
+    <h3 id="vendorModalTitle" style="font-family:'Syne',sans-serif;font-size:18px;margin-bottom:12px">Vendeur</h3>
+    <div id="vendorModalBody"></div>
+    <div class="modal-actions" style="justify-content:flex-end;margin-top:20px">
+      <button class="btn-outline" onclick="closeVendorModal()">Fermer</button>
+      <button class="btn-gold" id="vendorModalAction">Approuver</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/admin.js" defer></script>
+</body>
+</html>
+""

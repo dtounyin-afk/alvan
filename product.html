@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Produit — ModaAfrik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="assets/css/main.css"/>
+  <link rel="stylesheet" href="assets/css/product.css"/>
+</head>
+<body>
+<header class="header" id="header">
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5f0e8"/></svg></div>
+      ModaAfrik
+    </a>
+    <div class="nav-search">
+      <input type="text" placeholder="Rechercher des produits…" autocomplete="off"/>
+      <button><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="#contact-admin" class="btn-vendor">Vendre</a>
+      <a href="auth.html" class="nav-icon" title="Compte"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+      <a href="cart.html" class="nav-icon cart-icon" title="Panier"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+  <div class="nav-cats">
+    <div class="nav-cats-inner">
+      <a href="shop.html?cat=robes-pagnes">Robes &amp; Pagnes</a>
+      <a href="shop.html?cat=boubous">Boubous</a>
+      <a href="shop.html?cat=hommes">Hommes</a>
+      <a href="shop.html?cat=enfants">Enfants</a>
+      <a href="shop.html?cat=accessoires">Accessoires</a>
+      <a href="shop.html?cat=bijoux">Bijoux</a>
+      <a href="shop.html?cat=chaussures">Chaussures</a>
+    </div>
+  </div>
+</header>
+
+<main class="container product-page">
+  <div class="breadcrumb" id="breadcrumb">
+    <a href="index.html">Accueil</a> › <a href="shop.html">Boutique</a> › <span>Produit</span>
+  </div>
+  <div class="product-layout" id="productLayout">
+    <div style="text-align:center;padding:80px;color:var(--text-3)">Chargement…</div>
+  </div>
+
+  <!-- ONGLETS -->
+  <div class="product-tabs">
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="openTab(this,'desc')">Description</button>
+      <button class="tab-btn" onclick="openTab(this,'reviews')">Avis (<span id="rvCount">0</span>)</button>
+      <button class="tab-btn" onclick="openTab(this,'shipping')">Livraison</button>
+      <button class="tab-btn" onclick="openTab(this,'vendor')">Vendeur</button>
+    </div>
+    <div class="tab-pane" id="tab-desc"></div>
+    <div class="tab-pane hidden" id="tab-reviews">
+      <div class="reviews-list" id="reviewsList"></div>
+      <div class="add-review">
+        <h4>Laisser un avis</h4>
+        <div class="star-input" id="starInput">
+          <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span>
+          <span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span>
+          <span onclick="setRating(5)">★</span>
+        </div>
+        <textarea class="form-group" id="rvText" placeholder="Votre avis…" rows="3" style="width:100%;margin-bottom:12px;padding:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);color:var(--text);outline:none;resize:vertical;"></textarea>
+        <button class="btn-primary" onclick="submitReview()">Publier mon avis</button>
+      </div>
+    </div>
+    <div class="tab-pane hidden" id="tab-shipping">
+      <div class="shipping-opts-list">
+        <div class="ship-row"><span class="ship-ico">🏪</span><div><strong>Retrait en boutique</strong><p style="font-size:13px;color:var(--text-2)">Venez récupérer votre commande. Disponible sous 2h.</p></div><span class="ship-price free">GRATUIT</span></div>
+        <div class="ship-row"><span class="ship-ico">🛵</span><div><strong>Livraison même ville</strong><p style="font-size:13px;color:var(--text-2)">Livraison J+1 dans la ville du vendeur.</p></div><span class="ship-price">1 000 FCFA</span></div>
+        <div class="ship-row"><span class="ship-ico">🚚</span><div><strong>Expédition interurbaine</strong><p style="font-size:13px;color:var(--text-2)">Livraison 2–5 jours vers toutes les villes.</p></div><span class="ship-price">dès 2 500 FCFA</span></div>
+      </div>
+    </div>
+    <div class="tab-pane hidden" id="tab-vendor"></div>
+  </div>
+
+  <!-- PRODUITS SIMILAIRES -->
+  <div class="related-section">
+    <h3>Vous aimerez aussi</h3>
+    <div class="products-grid" id="relatedGrid"></div>
+  </div>
+</main>
+
+<footer class="footer"><div class="footer-bottom container"><span>© 2025 ModaAfrik</span></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/product.js" defer></script>
+</body>
+</html>
+

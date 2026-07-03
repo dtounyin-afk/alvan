@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dashboard Vendeur — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/dashboard.css"/>
+</head>
+<body class="dash-body">
+
+<!-- SIDEBAR -->
+<aside class="dash-sidebar" id="dashSidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-mark"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/></svg></div>
+      ModaAfrik
+    </div>
+    <button class="sidebar-close" onclick="toggleSidebar()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="sidebar-vendor">
+    <div class="dash-vendor-av" id="sidebarAv">V</div>
+    <div>
+      <div class="dash-vendor-name" id="sidebarName">Ma Boutique</div>
+      <div class="dash-vendor-status">● Actif</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <button class="sidebar-link active" onclick="showSection('overview',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+      Vue d'ensemble
+    </button>
+    <button class="sidebar-link" onclick="showSection('products',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+      Mes produits
+    </button>
+    <button class="sidebar-link" onclick="showSection('add-product',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></span>
+      Ajouter un produit
+    </button>
+    <button class="sidebar-link" onclick="showSection('orders',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
+      Commandes
+      <span class="sl-badge" id="newOrdersBadge" style="display:none">0</span>
+    </button>
+    <button class="sidebar-link" onclick="showSection('earnings',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+      Revenus
+    </button>
+    <button class="sidebar-link" onclick="showSection('reviews',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></span>
+      Avis clients
+    </button>
+    <button class="sidebar-link" onclick="showSection('settings',this)">
+      <span class="sl-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+      Paramètres
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <a href="index.html" class="sidebar-link">
+      <span class="sl-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+      Voir le site
+    </a>
+    <button class="sidebar-link logout" onclick="Auth.logout()">
+      <span class="sl-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></span>
+      Déconnexion
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="dash-main">
+  <!-- TOPBAR -->
+  <div class="dash-topbar">
+    <button class="topbar-menu" onclick="toggleSidebar()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div id="topbarTitle" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text)">Vue d'ensemble</div>
+    <div class="topbar-right">
+      <button class="btn-primary btn-sm" onclick="showSection('add-product',null)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nouveau produit
+      </button>
+    </div>
+  </div>
+
+  <div class="dash-content">
+
+    <!-- ═══ VUE D'ENSEMBLE ═══ -->
+    <div class="dash-sec" id="sec-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fff8e1"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><span class="stat-info-lbl">Revenus du mois</span><strong class="stat-num" id="sRevMonth">—</strong><div class="stat-sub up" id="sTrend">↑ ce mois</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#ecfdf5"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+          <div><span class="stat-info-lbl">Commandes</span><strong class="stat-num" id="sOrdTotal">—</strong><div class="stat-sub" id="sPending">— en attente</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#eff6ff"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1e40af" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
+          <div><span class="stat-info-lbl">Produits actifs</span><strong class="stat-num" id="sProdsCount">—</strong><div class="stat-sub">publiés</div></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:#fdf4ff"><svg width="22" height="22" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+          <div><span class="stat-info-lbl">Note moyenne</span><strong class="stat-num" id="sRating">—</strong><div class="stat-sub">sur 5</div></div>
+        </div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head"><h3>Ventes — 7 derniers jours</h3></div>
+        <div class="mini-chart" id="miniChart"></div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head">
+          <h3>Commandes récentes</h3>
+          <button class="btn-ghost btn-sm" onclick="showSection('orders',null)">Tout voir →</button>
+        </div>
+        <div style="overflow-x:auto"><table class="orders-table" id="recentOrders"></table></div>
+      </div>
+    </div>
+
+    <!-- ═══ MES PRODUITS ═══ -->
+    <div class="dash-sec hidden" id="sec-products">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px">
+        <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Mes produits</h2>
+        <div style="display:flex;gap:10px;align-items:center">
+          <input type="text" placeholder="Rechercher…" oninput="filterVendorProds(this.value)" style="padding:8px 12px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);font-size:13px;outline:none;color:var(--text);width:200px"/>
+          <button class="btn-primary btn-sm" onclick="showSection('add-product',null)">+ Nouveau</button>
+        </div>
+      </div>
+      <div class="vp-grid" id="vendorProdsGrid"></div>
+    </div>
+
+    <!-- ═══ AJOUTER PRODUIT ═══ -->
+    <div class="dash-sec hidden" id="sec-add-product">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px">
+        <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">Ajouter un produit</h2>
+        <button class="btn-outline btn-sm" onclick="showSection('products',null)">← Retour</button>
+      </div>
+      <div class="apf-layout">
+        <!-- MAIN FORM -->
+        <div>
+          <div class="dash-card">
+            <h3>Informations générales</h3>
+            <div class="form-group"><label>Nom du produit *</label><input type="text" id="apName" placeholder="Ex: Robe Wax Soleil Africain"/></div>
+            <div class="form-group"><label>Description courte *</label><textarea id="apShortDesc" rows="2" placeholder="Description courte affichée dans les listings…"></textarea></div>
+            <div class="form-group"><label>Description complète</label><textarea id="apFullDesc" rows="4" placeholder="Description détaillée du produit, matières, entretien…"></textarea></div>
+          </div>
+          <div class="dash-card">
+            <h3>Prix &amp; Stock</h3>
+            <div class="form-row">
+              <div class="form-group"><label>Prix normal (FCFA) *</label><input type="number" id="apPrice" placeholder="0" oninput="calcCommission()"/></div>
+              <div class="form-group"><label>Prix promotionnel (FCFA)</label><input type="number" id="apSale" placeholder="Laisser vide si pas de promo"/></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Quantité en stock *</label><input type="number" id="apStock" placeholder="0"/></div>
+              <div class="form-group"><label>SKU / Référence</label><input type="text" id="apSKU" placeholder="Ex: ROB-WAX-001"/></div>
+            </div>
+          </div>
+          <div class="dash-card">
+            <h3>Tailles disponibles</h3>
+            <div class="sc-grid">
+              <label class="sc-item"><input type="checkbox" value="XS"/> XS</label>
+              <label class="sc-item"><input type="checkbox" value="S"/> S</label>
+              <label class="sc-item"><input type="checkbox" value="M"/> M</label>
+              <label class="sc-item"><input type="checkbox" value="L"/> L</label>
+              <label class="sc-item"><input type="checkbox" value="XL"/> XL</label>
+              <label class="sc-item"><input type="checkbox" value="XXL"/> XXL</label>
+              <label class="sc-item"><input type="checkbox" value="XXXL"/> XXXL</label>
+              <label class="sc-item"><input type="checkbox" value="Unique"/> Taille unique</label>
+            </div>
+            <div class="form-group" style="margin-top:14px"><label>Couleurs (séparées par virgule)</label><input type="text" id="apColors" placeholder="Ex: Rouge, Bleu, Vert, Or"/></div>
+          </div>
+          <div class="dash-card">
+            <div class="form-row">
+              <div class="form-group"><label>Catégorie *</label>
+                <select id="apCat">
+                  <option value="">Choisir une catégorie…</option>
+                  <option value="robes-pagnes">Robes &amp; Pagnes</option>
+                  <option value="boubous">Boubous &amp; Gandouras</option>
+                  <option value="hommes">Vêtements Homme</option>
+                  <option value="enfants">Enfants</option>
+                  <option value="accessoires">Accessoires &amp; Sacs</option>
+                  <option value="bijoux">Bijoux &amp; Perles</option>
+                  <option value="chaussures">Chaussures</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Tags / Mots-clés</label><input type="text" id="apTags" placeholder="wax, robe, femme, cameroun"/></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <div class="apf-sidebar">
+          <div class="dash-card">
+            <h3>Photos du produit</h3>
+            <div class="photo-drop" onclick="document.getElementById('photoInput').click()" id="photoDrop">
+              <input type="file" id="photoInput" multiple accept="image/*" style="display:none" onchange="previewPhotos(this)"/>
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 8px;display:block;color:var(--text-3)"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              <p style="font-size:13px;color:var(--text-2)">Cliquez pour uploader</p>
+              <p style="font-size:11px;color:var(--text-3);margin-top:4px">JPG, PNG, WebP — Max 8 photos</p>
+            </div>
+            <div id="photoPreviews" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+          </div>
+          <div class="dash-card">
+            <h3>Statut de publication</h3>
+            <select id="apStatus" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);color:var(--text);font-size:14px;outline:none">
+              <option value="active">✅ Publié (visible dans la boutique)</option>
+              <option value="draft">📝 Brouillon (non visible)</option>
+            </select>
+          </div>
+          <div class="dash-card">
+            <h3>Commission ModaAfrik (10%)</h3>
+            <div class="commission-box">
+              <div>Prix de vente : <strong id="ccPrice">0 FCFA</strong></div>
+              <div>Commission (10%) : <strong id="ccComm" style="color:var(--red)">0 FCFA</strong></div>
+              <div class="commission-net">Vous recevez : <strong id="ccNet">0 FCFA</strong></div>
+            </div>
+          </div>
+          <button class="btn-gold btn-full" onclick="saveProduct('active')" style="margin-bottom:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+            Publier le produit
+          </button>
+          <button class="btn-outline btn-full" onclick="saveProduct('draft')">Sauvegarder en brouillon</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMMANDES ═══ -->
+    <div class="dash-sec hidden" id="sec-orders">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Mes commandes</h2>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px" id="orderFilters">
+        <button class="size-tag active" onclick="filterOrders('all',this)">Toutes</button>
+        <button class="size-tag" onclick="filterOrders('pending',this)">En attente</button>
+        <button class="size-tag" onclick="filterOrders('processing',this)">En préparation</button>
+        <button class="size-tag" onclick="filterOrders('shipped',this)">Expédiées</button>
+        <button class="size-tag" onclick="filterOrders('delivered',this)">Livrées</button>
+      </div>
+      <div style="overflow-x:auto"><table class="orders-table" id="fullOrders"></table></div>
+    </div>
+
+    <!-- ═══ REVENUS ═══ -->
+    <div class="dash-sec hidden" id="sec-earnings">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Mes revenus</h2>
+      <div class="earn-grid">
+        <div class="earn-card">
+          <span>Solde disponible</span>
+          <strong id="eAvail">—</strong>
+          <small>Prochain versement : lundi</small>
+          <button class="btn-primary btn-sm" style="margin-top:12px" onclick="requestWithdraw()">Demander un retrait</button>
+        </div>
+        <div class="earn-card">
+          <span>Revenus ce mois</span>
+          <strong id="eMonth">—</strong>
+          <small>Après commission (90%)</small>
+        </div>
+        <div class="earn-card">
+          <span>Total cumulé</span>
+          <strong id="eTotal">—</strong>
+          <small>Depuis votre inscription</small>
+        </div>
+      </div>
+      <div class="dash-card">
+        <div class="dash-card-head"><h3>Historique des versements</h3></div>
+        <div style="overflow-x:auto">
+          <table class="orders-table">
+            <thead><tr><th>Date</th><th>Montant brut</th><th>Commission</th><th>Net reçu</th><th>Méthode</th><th>Statut</th></tr></thead>
+            <tbody id="payHistory"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ AVIS ═══ -->
+    <div class="dash-sec hidden" id="sec-reviews">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Avis de mes clients</h2>
+      <div class="dash-card" style="display:flex;gap:28px;align-items:flex-start" id="reviewsOv"></div>
+      <div id="reviewsList" style="margin-top:16px"></div>
+    </div>
+
+    <!-- ═══ PARAMÈTRES ═══ -->
+    <div class="dash-sec hidden" id="sec-settings">
+      <h2 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:20px">Paramètres boutique</h2>
+      <div class="settings-grid">
+        <div class="dash-card">
+          <h3>Informations boutique</h3>
+          <div class="form-group"><label>Nom de la boutique</label><input type="text" id="setStoreName"/></div>
+          <div class="form-group"><label>Description</label><textarea id="setStoreDesc" rows="3"></textarea></div>
+          <div class="form-group"><label>Téléphone</label><input type="tel" id="setPhone" placeholder="+237 6XX XXX XXX"/></div>
+          <div class="form-group"><label>Adresse boutique</label><input type="text" id="setAddress" placeholder="Quartier, rue, ville"/></div>
+          <button class="btn-primary" onclick="saveSettings()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>
+            Sauvegarder
+          </button>
+        </div>
+        <div class="dash-card">
+          <h3>Click &amp; Collect</h3>
+          <div style="margin-bottom:14px"><label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px"><input type="checkbox" id="ccEnabled" checked style="accent-color:var(--gold);width:16px;height:16px"/> Activer le retrait en boutique</label></div>
+          <div class="form-group"><label>Horaires</label><input type="text" id="ccHours" placeholder="Lun–Sam 8h–18h, Dim 10h–15h"/></div>
+          <div class="form-group"><label>Instructions</label><textarea id="ccInstr" rows="2" placeholder="Demandez à l'accueil en présentant votre confirmation…"></textarea></div>
+          <button class="btn-outline" onclick="saveSettings()">Sauvegarder</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.dash-content -->
+</div><!-- /.dash-main -->
+
+<!-- MODAL RETRAIT -->
+<div class="modal-overlay hidden" id="withdrawModal">
+  <div class="modal-box" style="text-align:left">
+    <h3 style="font-family:'Syne',sans-serif;font-size:18px;margin-bottom:16px">Demande de retrait</h3>
+    <p style="font-size:14px;color:var(--text-2);margin-bottom:20px">Solde disponible : <strong id="wdBalance" style="color:var(--gold)">—</strong></p>
+    <div class="form-group"><label>Montant à retirer (FCFA)</label><input type="number" id="wdAmount" placeholder="Montant minimum : 5 000 FCFA"/></div>
+    <div class="form-group"><label>Méthode de réception</label>
+      <select id="wdMethod" style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:var(--r-md);background:var(--surface);color:var(--text);font-size:14px;outline:none">
+        <option>Orange Money (+237)</option>
+        <option>MTN MoMo (+237)</option>
+        <option>Virement bancaire</option>
+      </select>
+    </div>
+    <div class="modal-actions" style="justify-content:flex-end">
+      <button class="btn-outline" onclick="document.getElementById('withdrawModal').classList.add('hidden')">Annuler</button>
+      <button class="btn-gold" onclick="confirmWithdraw()">Confirmer le retrait</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/dashboard.js" defer></script>
+</body>
+</html>

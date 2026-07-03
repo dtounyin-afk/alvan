@@ -1,0 +1,66 @@
+/* ================================================================
+   MODAAFRIK — ADMIN (extends dashboard.css)
+   ================================================================ */
+.admin-sec { display:block }
+.admin-sec.hidden { display:none !important }
+
+/* Commission chart */
+.admin-comm-chart {
+  height: 160px; display: flex; align-items: flex-end; gap: 6px; padding: 8px 0;
+}
+.admin-comm-bar {
+  flex: 1; border-radius: 4px 4px 0 0; min-width: 20px;
+  background: linear-gradient(to top, rgba(200,144,42,.4), rgba(200,144,42,.8));
+  transition: var(--t-med); position: relative; cursor: pointer;
+}
+.admin-comm-bar:hover { background: var(--grad-gold); }
+.admin-comm-bar .bar-tip {
+  position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+  background: var(--text); color: var(--bg); font-size: 10px; font-weight: 700;
+  padding: 3px 7px; border-radius: 4px; white-space: nowrap; display: none;
+}
+.admin-comm-bar:hover .bar-tip { display: block; }
+.bar-label {
+  position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--text-3); white-space: nowrap;
+}
+
+/* Vendor pending card */
+.pending-vendor-row {
+  display: flex; align-items: center; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.pending-vendor-row:last-child { border: none; }
+.pv-av {
+  width: 38px; height: 38px; border-radius: 50%; background: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 14px; color: var(--bg); flex-shrink: 0;
+}
+.pv-info { flex: 1; }
+.pv-name { font-weight: 700; font-size: 14px; }
+.pv-city { font-size: 12px; color: var(--text-3); }
+.pv-date { font-size: 11px; color: var(--text-3); }
+.pv-actions { display: flex; gap: 6px; }
+
+/* Status badges */
+.sbadge-active    { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.sbadge-pending   { background: #fff8e1; color: #92400e; border: 1px solid #fde68a; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+.sbadge-suspended { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; padding: 3px 8px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+/* Cities list */
+.city-row {
+  display: flex; align-items: center; gap: 10px; padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.city-row:last-child { border: none; }
+.city-name { flex: 1; font-size: 14px; font-weight: 600; }
+.city-price { width: 120px; }
+.city-price input {
+  width: 100%; padding: 6px 10px;
+  border: 1.5px solid var(--border); border-radius: var(--r-sm);
+  background: var(--surface); color: var(--text); font-size: 13px; outline: none;
+}
+
+@media (max-width: 1024px) {
+  #asec-settings > div { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,339 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>ModaAfrik — Marketplace de Mode Africaine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap"/></noscript>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/home.css"/>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header" id="header">
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <div class="logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/></svg></div>
+      ModaAfrik
+    </a>
+    <div class="nav-search">
+      <input type="text" id="navSearch" placeholder="Robes wax, boubous, bijoux…" autocomplete="off"/>
+      <button onclick="doSearch()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="#contact-admin" class="btn-vendor">Vendre</a>
+      <a href="auth.html" class="nav-icon" title="Compte"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+      <a href="cart.html" class="nav-icon cart-icon" title="Panier"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+  <div class="nav-cats">
+    <div class="nav-cats-inner">
+      <a href="shop.html?cat=robes-pagnes">Robes &amp; Pagnes</a>
+      <a href="shop.html?cat=boubous">Boubous</a>
+      <a href="shop.html?cat=hommes">Hommes</a>
+      <a href="shop.html?cat=enfants">Enfants</a>
+      <a href="shop.html?cat=accessoires">Accessoires</a>
+      <a href="shop.html?cat=bijoux">Bijoux</a>
+      <a href="shop.html?cat=chaussures">Chaussures</a>
+      <a href="vendors.html">Vendeurs</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-waves">
+    <svg viewBox="0 0 1440 600" preserveAspectRatio="xMidYMid slice">
+      <path d="M0,300 C200,100 400,500 600,300 C800,100 1000,500 1200,300 C1300,200 1380,350 1440,300 L1440,600 L0,600 Z" fill="#c8902a" opacity=".06"/>
+      <path d="M0,400 C300,200 500,600 800,400 C1000,200 1200,500 1440,350 L1440,600 L0,600 Z" fill="#2563eb" opacity=".04"/>
+      <path d="M0,200 C200,400 600,100 900,350 C1100,500 1300,100 1440,250 L1440,0 L0,0 Z" fill="#7c3aed" opacity=".03"/>
+    </svg>
+  </div>
+  <div class="hero-inner container">
+    <div class="hero-left">
+      <div class="hero-label">Marketplace · Mode Africaine</div>
+      <h1 class="hero-title">Explore<br/>Cameroun<br/>Marketplace</h1>
+      <p class="hero-desc">Découvrez des milliers de créations uniques de vendeurs indépendants et artisans camerounais. Robes wax, boubous, bijoux, pagnes.</p>
+      <div class="hero-cta">
+        <a href="shop.html" class="btn-gold btn-lg">Start Shopping <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+        <a href="#contact-admin" class="btn-outline btn-lg">Vendre sur ModaAfrik</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-num">500+</span><span class="trust-label">Vendeurs</span></div>
+        <div class="trust-item"><span class="trust-num">12K+</span><span class="trust-label">Produits</span></div>
+        <div class="trust-item"><span class="trust-num">98%</span><span class="trust-label">Satisfaction</span></div>
+      </div>
+    </div>
+      <div class="hero-photo-grid">
+        <div class="hpg-item tall" style="background:linear-gradient(135deg,#e8d5c4,#d4b896)"><div class="hpg-item-inner">👗</div><div class="hpg-label">Robes Wax</div></div>
+        <div class="hpg-item" style="background:linear-gradient(135deg,#c4d4e8,#96b0d4)"><div class="hpg-item-inner" style="font-size:36px">📱</div></div>
+        <div class="hpg-item" style="background:linear-gradient(135deg,#d4e8c4,#b0d496)"><div class="hpg-item-inner" style="font-size:36px">🥻</div></div>
+        <div class="hpg-item wide" style="background:linear-gradient(135deg,#e8c4d4,#d496b0)"><div class="hpg-item-inner">💃</div><div class="hpg-label">Fashion Trends</div></div>
+        <div class="hpg-item" style="background:linear-gradient(135deg,#e8e4c4,#d4ce96)"><div class="hpg-item-inner" style="font-size:36px">💎</div></div>
+        <div class="hpg-item" style="background:linear-gradient(135deg,#c4c4e8,#9696d4)"><div class="hpg-item-inner" style="font-size:36px">👜</div></div>
+        <div class="hpg-item" style="background:linear-gradient(135deg,#e8d0c4,#d4a896)"><div class="hpg-item-inner" style="font-size:36px">⌚</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section" id="marquee">
+  <div class="marquee-track">
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Mode Africaine</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Wax &amp; Ankara</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Boubous Brodés</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Orange Money</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>MTN MoMo</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>500+ Vendeurs</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Artisans Authentiques</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Livraison Partout</div>
+    <!-- duplicate -->
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Mode Africaine</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Wax &amp; Ankara</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Boubous Brodés</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Orange Money</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>MTN MoMo</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>500+ Vendeurs</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Artisans Authentiques</div>
+    <div class="marquee-item"><svg width="12" height="12" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg>Livraison Partout</div>
+  </div>
+</div>
+
+<!-- OUR GLOBAL VISTAS / WHO WE ARE -->
+<section class="overview-section">
+  <div class="container overview-grid">
+    <div class="overview-photos">
+      <div class="ov-photo ov-tall" style="background:linear-gradient(135deg,#e8d5c4,#c4a882)">👗</div>
+      <div class="ov-photo" style="background:linear-gradient(135deg,#c4d4e8,#82a8c4)">📸</div>
+      <div class="ov-photo" style="background:linear-gradient(135deg,#d4e8c4,#a8c482)">🥻</div>
+      <div class="ov-photo" style="background:linear-gradient(135deg,#e8c4d4,#c482a8)">💎</div>
+      <div class="ov-photo" style="background:linear-gradient(135deg,#e8e4c4,#c4c082)">🌍</div>
+    </div>
+    <div class="overview-text">
+      <div class="overview-label">Marketplace Overview</div>
+      <h2 class="section-title">Our Cameroon<br/><em>Vistas</em></h2>
+      <p>ModaAfrik est la première marketplace de mode camerounaise authentique. Une communauté dynamique qui connecte des milliers d'acheteurs avec les meilleurs artisans du Cameroun.</p>
+      <p style="color:var(--text-3);font-size:13px">Nous croyons en l'authenticité et en l'artisanat camerounais, de Douala à Maroua, de Bafoussam à Bamenda.</p>
+      <div class="overview-stats">
+        <div class="ov-stat"><strong>10</strong><span>Régions couvertes</span></div>
+        <div class="ov-stat"><strong>150+</strong><span>Catégories produits</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CURATED COLLECTIONS -->
+<section class="collections-section">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px">
+      <div>
+        <div class="section-label">Our Products</div>
+        <h2 class="section-title">Curated<br/><em>Collections</em></h2>
+      </div>
+      <a href="shop.html" class="see-all">Voir tout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a>
+    </div>
+    <div class="collections-grid">
+      <div class="coll-left">
+        <a class="coll-card" href="shop.html?cat=bijoux">
+          <div class="coll-img" style="background:linear-gradient(135deg,#e8e0f0,#c4b8e8)">💎</div>
+          <div class="coll-body"><div><div class="coll-name">Tech Innovations</div><div class="coll-sub">Bijoux artisanaux</div></div><div class="coll-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+        </a>
+        <a class="coll-card" href="shop.html?cat=accessoires">
+          <div class="coll-img" style="background:linear-gradient(135deg,#f0e8e0,#e8c4a8)">👜</div>
+          <div class="coll-body"><div><div class="coll-name">Artisan Finds</div><div class="coll-sub">Pièces uniques</div></div><div class="coll-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+        </a>
+        <a class="coll-card" href="shop.html?cat=robes-pagnes">
+          <div class="coll-img" style="background:linear-gradient(135deg,#e0f0e8,#a8e8c4)">👗</div>
+          <div class="coll-body"><div><div class="coll-name">Fashion Trends</div><div class="coll-sub">Styles saisonniers</div></div><div class="coll-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+        </a>
+        <a class="coll-card" href="shop.html?cat=chaussures">
+          <div class="coll-img" style="background:linear-gradient(135deg,#f0e0e8,#e8a8c4)">👡</div>
+          <div class="coll-body"><div><div class="coll-name">Organic Style</div><div class="coll-sub">Cuir artisanal</div></div><div class="coll-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9,18 15,12 9,6"/></svg></div></div>
+        </a>
+      </div>
+      <div class="coll-right" id="featuredGrid">
+        <!-- Chargé par JS -->
+        <div class="skeleton" style="height:80px;border-radius:var(--r-lg)"></div>
+        <div class="skeleton" style="height:80px;border-radius:var(--r-lg)"></div>
+        <div class="skeleton" style="height:80px;border-radius:var(--r-lg)"></div>
+        <div class="skeleton" style="height:80px;border-radius:var(--r-lg)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SELLER SOLUTIONS -->
+<section class="solutions-section">
+  <div class="container">
+    <div style="text-align:center">
+      <div class="section-label">Our Services</div>
+      <h2 class="section-title" style="font-size:clamp(26px,4vw,48px)">Seller <em>Solutions</em></h2>
+    </div>
+    <div class="solutions-grid">
+      <div class="solution-card featured" onclick="location.href='vendor-dashboard.html'">
+        <div class="sol-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div class="sol-title">Seller Platform</div>
+        <div class="sol-desc">Listings produits faciles, gestion des stocks, analyses puissantes et tableau de bord complet.</div>
+        <a href="vendor-dashboard.html" class="sol-link">Learn More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="solution-card" onclick="location.href='checkout.html'">
+        <div class="sol-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <div class="sol-title">Secure Payments</div>
+        <div class="sol-desc">Paiements globaux cryptés — Orange Money, MTN MoMo, CinetPay, FedaPay avec protection acheteur.</div>
+        <a href="checkout.html" class="sol-link">Learn More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+      <div class="solution-card" onclick="location.href='vendors.html'">
+        <div class="sol-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+        <div class="sol-title">Global Network</div>
+        <div class="sol-desc">Rejoignez 500+ artisans vendeurs de toute l'Afrique. Commencez à vendre en 5 minutes.</div>
+        <a href="#contact-admin" class="sol-link">Learn More <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></a>
+      </div>
+    </div>
+
+    <!-- Dashboard preview -->
+    <div class="dash-preview">
+      <div class="dp-header">
+        <div class="dp-title">Dashboard</div>
+        <div style="font-size:12px;color:var(--text-3)">vs. last month</div>
+      </div>
+      <div class="dp-stats">
+        <div class="dp-stat"><div class="dp-stat-num">1.2k</div><div class="dp-stat-lbl">Average Ratings</div></div>
+        <div class="dp-stat"><div class="dp-stat-num">45</div><div class="dp-stat-lbl">Order Status</div></div>
+        <div class="dp-stat"><div class="dp-stat-num">245k</div><div class="dp-stat-lbl">FCFA Revenue</div></div>
+        <div class="dp-stat"><div class="dp-stat-num">12</div><div class="dp-stat-lbl">Global Teams</div></div>
+      </div>
+      <div class="dp-chart">
+        <div class="dp-bar" style="height:40%"></div>
+        <div class="dp-bar active" style="height:60%"></div>
+        <div class="dp-bar" style="height:45%"></div>
+        <div class="dp-bar active" style="height:80%"></div>
+        <div class="dp-bar" style="height:55%"></div>
+        <div class="dp-bar active" style="height:90%"></div>
+        <div class="dp-bar" style="height:70%"></div>
+        <div class="dp-bar active" style="height:85%"></div>
+        <div class="dp-bar" style="height:50%"></div>
+        <div class="dp-bar" style="height:65%"></div>
+        <div class="dp-bar active" style="height:75%"></div>
+        <div class="dp-bar" style="height:55%"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUITS VEDETTES -->
+<section class="section" style="background:var(--bg)">
+  <div class="container">
+    <div class="section-header">
+      <div><div class="section-label">Nouveautés</div><h2 class="section-title">Produits <em>Vedettes</em></h2></div>
+      <a href="shop.html" class="see-all">Voir tout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a>
+    </div>
+    <div class="products-grid" id="homeProductsGrid">
+      <div class="skeleton" style="padding-bottom:130%"></div>
+      <div class="skeleton" style="padding-bottom:130%"></div>
+      <div class="skeleton" style="padding-bottom:130%"></div>
+      <div class="skeleton" style="padding-bottom:130%"></div>
+    </div>
+  </div>
+</section>
+
+<!-- VENDEURS -->
+<section class="vendors-section">
+  <div class="container">
+    <div class="section-header">
+      <div><div class="section-label">Artisans</div><h2 class="section-title">Nos <em>Vendeurs</em> Stars</h2></div>
+      <a href="vendors.html" class="see-all">Tous les vendeurs <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg></a>
+    </div>
+    <div class="vendors-grid" id="homeVendorsGrid">
+      <div class="skeleton" style="height:160px;border-radius:var(--r-lg)"></div>
+      <div class="skeleton" style="height:160px;border-radius:var(--r-lg)"></div>
+      <div class="skeleton" style="height:160px;border-radius:var(--r-lg)"></div>
+      <div class="skeleton" style="height:160px;border-radius:var(--r-lg)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA VENDEUR -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-grid">
+      <div class="cta-left">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--gold-2);margin-bottom:12px">Rejoignez-nous</div>
+        <h2>Vous créez ?<br/>Vendez sur <em>ModaAfrik</em> !</h2>
+        <p>Rejoignez 500+ artisans indépendants. Créez votre boutique en 5 minutes, gérez vos stocks et recevez vos paiements directement par Mobile Money.</p>
+        <div class="cta-perks">
+          <div class="cta-perk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Inscription gratuite</div>
+          <div class="cta-perk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Dashboard complet</div>
+          <div class="cta-perk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>Orange Money &amp; MTN</div>
+          <div class="cta-perk"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg>10% commission seulement</div>
+        </div>
+        <a href="#contact-admin" class="btn-gold btn-lg">Créer ma boutique gratuitement</a>
+      </div>
+      <div class="cta-right">
+        <div class="cta-stat">
+          <div class="cta-stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><div class="cta-stat-num">245 000 FCFA</div><div class="cta-stat-lbl">Revenu moyen mensuel par vendeur</div></div>
+        </div>
+        <div class="cta-stat">
+          <div class="cta-stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+          <div><div class="cta-stat-num">47 commandes</div><div class="cta-stat-lbl">Moyenne mensuelle par boutique</div></div>
+        </div>
+        <div class="cta-stat">
+          <div class="cta-stat-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg></div>
+          <div><div class="cta-stat-num">4.7 / 5</div><div class="cta-stat-lbl">Note moyenne des vendeurs</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <div class="footer-logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="currentColor"/></svg></div>
+          ModaAfrik
+        </div>
+        <p>La première marketplace de mode africaine. Achetez et vendez des créations authentiques dans toute l'Afrique.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+          <a href="#" class="social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+          <a href="#" class="social-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col"><h4>Acheter</h4><ul><li><a href="shop.html">Tous les produits</a></li><li><a href="shop.html?cat=robes-pagnes">Robes &amp; Pagnes</a></li><li><a href="shop.html?cat=boubous">Boubous</a></li><li><a href="shop.html?cat=bijoux">Bijoux</a></li><li><a href="shop.html?sort=new">Nouveautés</a></li></ul></div>
+      <div class="footer-col"><h4>Vendre</h4><ul><li><a href="#contact-admin">Devenir vendeur</a></li><li><a href="vendor-dashboard.html">Tableau de bord</a></li><li><a href="#">Guide vendeur</a></li><li><a href="#">Commissions</a></li></ul></div>
+      <div class="footer-col"><h4>Aide</h4><ul><li><a href="#">Comment ça marche</a></li><li><a href="#">Livraison &amp; retours</a></li><li><a href="#">Paiements</a></li><li><a href="#">Contact</a></li><li><a href="#">CGV</a></li></ul></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <span>© 2025 ModaAfrik. Tous droits réservés.</span>
+      <div class="pay-logos">
+        <span class="pay-logo" style="background:#FF6600;border-color:#FF6600;color:#fff;font-size:10px;font-weight:800">OM</span>
+        <span class="pay-logo" style="background:#FFCC00;border-color:#FFCC00;color:#000;font-size:10px;font-weight:800">MTN</span>
+        <span class="pay-logo" style="background:#003087;border-color:#003087;color:#fff;font-size:10px;font-weight:800">CinetPay</span>
+        <span class="pay-logo" style="background:#00875A;border-color:#00875A;color:#fff;font-size:10px;font-weight:800">FedaPay</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/home.js" defer></script>
+<script>
+function doSearch(){var q=document.getElementById('navSearch').value.trim();if(q)location.href='shop.html?search='+encodeURIComponent(q);}
+document.addEventListener('DOMContentLoaded',function(){var inp=document.getElementById('navSearch');if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')doSearch();});});
+</script>
+</body>
+</html>
+

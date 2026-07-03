@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Boutique Vendeur — ModaAfrik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="assets/css/main.css"/>
+  <style>
+    .vendor-profile-page{padding:100px 0 80px}
+    .vp-hero{background:linear-gradient(135deg,var(--bg-2),var(--bg-3));border:1px solid var(--border);border-left:none;border-right:none;padding:48px 0;margin-bottom:48px}
+    .vp-hero-inner{display:flex;gap:28px;align-items:center}
+    .vp-av{width:100px;height:100px;border-radius:50%;background:var(--grad-gold);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:800;color:#080810;flex-shrink:0;border:4px solid rgba(232,168,56,.3)}
+    .vp-meta h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:6px}
+    .vp-meta p{font-size:14px;color:var(--text-2);max-width:500px;margin-bottom:12px}
+    .vp-kpis{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px}
+    .vp-kpi{text-align:center}
+    .vp-kpi strong{display:block;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--gold)}
+    .vp-kpi span{font-size:12px;color:var(--text-3)}
+    @media(max-width:600px){.vp-hero-inner{flex-direction:column;text-align:center}.vp-kpis{justify-content:center}}
+  </style>
+</head>
+<body>
+<header class="header scrolled" style="position:relative;backdrop-filter:none;background:var(--bg-2);border-bottom:1px solid var(--border)">
+  <nav class="navbar">
+    <a href="index.html" class="logo"><span class="logo-star">✦</span>ModaAfrik</a>
+    <div class="nav-actions" style="margin-left:auto">
+      <a href="auth.html" class="nav-icon-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn cart-icon">🛒<span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+</header>
+
+<main class="vendor-profile-page">
+  <!-- HERO VENDEUR -->
+  <div class="vp-hero">
+    <div class="container">
+      <div class="breadcrumb" style="margin-bottom:20px"><a href="index.html">Accueil</a> › <a href="vendors.html">Vendeurs</a> › <span id="vBreadcrumb">Boutique</span></div>
+      <div class="vp-hero-inner" id="vpHero">
+        <div style="text-align:center;padding:40px;color:var(--text-3)">Chargement…</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUITS DU VENDEUR -->
+  <div class="container">
+    <div class="section-header" style="margin-bottom:32px">
+      <h2 class="section-title">Produits de la boutique</h2>
+      <span id="vpProdCount" style="font-size:14px;color:var(--text-3)"></span>
+    </div>
+    <div class="products-grid" id="vendorProdGrid"></div>
+  </div>
+</main>
+
+<footer class="footer"><div class="footer-bottom container"><span>© 2025 ModaAfrik</span></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script defer>
+const MOCK_VENDORS_MAP = {
+  'usr-002':{storeName:'Wax & Merveilles',storeCity:'Dakar',storeDesc:'Créations uniques en tissu wax authentique du Sénégal.',rating:4.8,totalSales:1250000,productCount:18},
+  'usr-003':{storeName:'Kente Royal',storeCity:'Accra',storeDesc:'Tissus kente et vêtements traditionnels du Ghana.',rating:4.6,totalSales:980000,productCount:12},
+  'usr-004':{storeName:'Mode Guinéenne',storeCity:'Conakry',storeDesc:'Boubous et tenues de cérémonie guinéennes de prestige.',rating:4.7,totalSales:750000,productCount:15},
+  'usr-005':{storeName:'Aso-Oke Palace',storeCity:'Lagos',storeDesc:'Tissus aso-oke et ankara de qualité supérieure du Nigeria.',rating:4.9,totalSales:2100000,productCount:24},
+  'usr-006':{storeName:'Bogolan Chic',storeCity:'Abidjan',storeDesc:'Bogolan et bazin riche, élégance malienne modernisée.',rating:4.5,totalSales:620000,productCount:10},
+};
+const ALL_PRODUCTS = [
+  {id:'prd-001',name:'Robe Wax Soleil d\'Afrique',price:18500,salePrice:null,emoji:'👗',gradient:'linear-gradient(135deg,#e67e22,#f39c12)',badge:'bestseller',rating:4.9,reviewCount:47,vendorId:'usr-002'},
+  {id:'prd-002',name:'Grand Boubou Brodé Prestige',price:45000,salePrice:38000,emoji:'🥻',gradient:'linear-gradient(135deg,#2c3e50,#3498db)',badge:'promo',rating:4.8,reviewCount:32,vendorId:'usr-004'},
+  {id:'prd-003',name:'Ensemble Kente Royale',price:32000,salePrice:null,emoji:'👔',gradient:'linear-gradient(135deg,#27ae60,#f39c12)',badge:'new',rating:4.7,reviewCount:28,vendorId:'usr-003'},
+  {id:'prd-004',name:'Sac Cuir Bogolan Artisan',price:22000,salePrice:19500,emoji:'👜',gradient:'linear-gradient(135deg,#8e44ad,#3498db)',badge:'promo',rating:4.6,reviewCount:19,vendorId:'usr-006'},
+  {id:'prd-005',name:'Collier Perles Yoruba Or',price:15000,salePrice:null,emoji:'💎',gradient:'linear-gradient(135deg,#f39c12,#e74c3c)',badge:'bestseller',rating:4.9,reviewCount:63,vendorId:'usr-005'},
+  {id:'prd-007',name:'Robe Ankara Fleurs Lagos',price:21000,salePrice:17500,emoji:'👗',gradient:'linear-gradient(135deg,#1abc9c,#2980b9)',badge:'promo',rating:4.7,reviewCount:55,vendorId:'usr-005'},
+  {id:'prd-010',name:'Bracelet Or Ashanti',price:85000,salePrice:null,emoji:'💍',gradient:'linear-gradient(135deg,#f7971e,#ffd200)',badge:'premium',rating:5.0,reviewCount:12,vendorId:'usr-003'},
+  {id:'prd-012',name:'Boubou Femme Dentelle Dorée',price:38000,salePrice:null,emoji:'🥻',gradient:'linear-gradient(135deg,#c94b4b,#4b134f)',badge:'premium',rating:4.9,reviewCount:29,vendorId:'usr-004'},
+];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const vid = new URLSearchParams(location.search).get('id') || 'usr-002';
+  let vendor, products;
+  try {
+    const res = await Api.vendors.get(vid);
+    vendor = res.vendor; products = res.products;
+  } catch {
+    vendor   = MOCK_VENDORS_MAP[vid] || MOCK_VENDORS_MAP['usr-002'];
+    products = ALL_PRODUCTS.filter(p => p.vendorId === vid);
+  }
+  renderVendor(vendor || {}, products || []);
+});
+
+function renderVendor(v, products) {
+  document.title = `${v.storeName} — ModaAfrik`;
+  document.getElementById('vBreadcrumb').textContent = v.storeName;
+  document.getElementById('vpProdCount').textContent = `${products.length} produits`;
+
+  document.getElementById('vpHero').innerHTML = `
+  <div class="vp-av">${v.storeName?.[0]||'V'}</div>
+  <div class="vp-meta">
+    <h1>${v.storeName}</h1>
+    <p>${v.storeDesc||''}</p>
+    <div style="font-size:13px;color:var(--text-3)">📍 ${v.storeCity||''}</div>
+    <div class="vp-kpis">
+      <div class="vp-kpi"><strong>★ ${(+v.rating||5).toFixed(1)}</strong><span>Note</span></div>
+      <div class="vp-kpi"><strong>${products.length}</strong><span>Produits</span></div>
+      ${v.totalSales?`<div class="vp-kpi"><strong>${Math.round(v.totalSales/1000)}K FCFA</strong><span>Ventes totales</span></div>`:''}
+    </div>
+  </div>
+  <div style="margin-left:auto">
+    <a href="shop.html?vendor=${v.id||''}" class="btn-outline">Tous ses produits</a>
+  </div>`;
+
+  const grid = document.getElementById('vendorProdGrid');
+  if (!products.length) { grid.innerHTML = '<p style="color:var(--text-3);grid-column:1/-1;text-align:center;padding:48px">Aucun produit pour le moment.</p>'; return; }
+
+  grid.innerHTML = products.map(p => {
+    const price = p.salePrice || p.price;
+    const badge = p.badge ? `<span class="product-badge badge-${p.badge}">${{bestseller:'🔥 Best-seller',new:'✨ Nouveau',promo:'💸 Promo',premium:'💎 Premium'}[p.badge]||p.badge}</span>` : '';
+    return `<div class="product-card" onclick="location.href='product.html?id=${p.id}'">
+      <div class="product-img">
+        <div class="product-img-bg" style="background:${p.gradient||'linear-gradient(135deg,#12121f,#1a0a2e)'}">${p.emoji||'👗'}</div>
+        ${badge}
+        <div class="product-quick-add" onclick="event.stopPropagation();addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})">+ Ajouter au panier</div>
+      </div>
+      <div class="product-body">
+        <div class="product-name">${p.name}</div>
+        <div class="product-price-row"><span class="price-main">${fmtPrice(price)}</span>${p.salePrice?`<span class="price-old">${fmtPrice(p.price)}</span>`:''}</div>
+        <div class="product-rating"><span class="stars">${starsHtml(p.rating||0)}</span><span>(${p.reviewCount||0})</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCart(p) { Cart.add(p,1,p.sizes?.[0]||'',p.colors?.[0]||''); }
+</script>
+</body>
+</html>

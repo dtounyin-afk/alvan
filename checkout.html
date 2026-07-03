@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Paiement — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/checkout.css"/>
+</head>
+<body style="background:var(--bg)">
+
+<nav class="ck-nav">
+  <a href="index.html" class="ck-logo">
+    <div style="width:28px;height:28px;border-radius:7px;background:var(--text);display:flex;align-items:center;justify-content:center;margin-right:8px"><svg width="13" height="13" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5f0e8"/></svg></div>
+    ModaAfrik
+  </a>
+  <div class="ck-steps">
+    <div class="ck-step active" id="si1"><span class="ck-num">1</span><span class="ck-step-lbl">Infos</span></div>
+    <div class="ck-line"></div>
+    <div class="ck-step" id="si2"><span class="ck-num">2</span><span class="ck-step-lbl">Livraison</span></div>
+    <div class="ck-line"></div>
+    <div class="ck-step" id="si3"><span class="ck-num">3</span><span class="ck-step-lbl">Paiement</span></div>
+  </div>
+  <div class="ck-secure">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    Paiement sécurisé
+  </div>
+</nav>
+
+<div class="ck-layout">
+  <!-- FORMULAIRE -->
+  <div class="ck-form-area">
+
+    <!-- STEP 1 -->
+    <div class="ck-panel" id="step1">
+      <h2>Vos informations</h2>
+      <div class="form-row">
+        <div class="form-group"><label>Prénom *</label><input type="text" id="ckFirstName" placeholder="Jean"/></div>
+        <div class="form-group"><label>Nom *</label><input type="text" id="ckLastName" placeholder="Kamga"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" id="ckEmail" placeholder="jean@exemple.com"/></div>
+      <div class="form-group"><label>Téléphone Cameroun *</label><input type="tel" id="ckPhone" placeholder="+237 6XX XXX XXX"/></div>
+      <div class="form-group"><label>Adresse (quartier, rue)</label><input type="text" id="ckAddress" placeholder="Akwa, Rue des Brasseries…"/></div>
+      <div class="form-group"><label>Ville *</label><input type="text" id="ckCity" placeholder="Douala"/></div>
+      <div style="margin-top:8px"><button class="btn-primary btn-full" onclick="goStep(2)">Continuer vers la livraison <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="ck-panel hidden" id="step2">
+      <h2>Mode de livraison</h2>
+      <div class="delivery-opts">
+
+        <label class="delivery-opt" id="opt-pickup" onclick="selectDelivery('pickup')">
+          <input type="radio" name="delivery" value="pickup"/>
+          <div class="do-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg></div>
+          <div class="do-body">
+            <strong>Retrait en boutique (Click &amp; Collect)</strong>
+            <p>Venez chercher votre commande directement chez le vendeur.</p>
+            <span class="do-delay"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> Disponible sous 2h après confirmation</span>
+          </div>
+          <div class="do-price free">GRATUIT</div>
+        </label>
+
+        <label class="delivery-opt" id="opt-local" onclick="selectDelivery('local')">
+          <input type="radio" name="delivery" value="local"/>
+          <div class="do-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 0 0-1-1h-1l-5 8h9.8"/><path d="M12 6h5l-2 8"/></svg></div>
+          <div class="do-body">
+            <strong>Livraison à domicile — Même ville</strong>
+            <p>Livraison par livreur dans la même ville que la boutique du vendeur.</p>
+            <span class="do-delay"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> Livraison sous 24h</span>
+          </div>
+          <div class="do-price">1 000 FCFA</div>
+        </label>
+
+        <label class="delivery-opt" id="opt-interurbain" onclick="selectDelivery('interurbain')">
+          <input type="radio" name="delivery" value="interurbain"/>
+          <div class="do-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+          <div class="do-body">
+            <strong>Expédition interurbaine — Autre ville</strong>
+            <p>Livraison dans une autre ville du Cameroun via transporteur.</p>
+            <span class="do-delay"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg> 2 à 5 jours ouvrés</span>
+          </div>
+          <div class="do-price" id="interPrice">dès 2 000 FCFA</div>
+        </label>
+
+      </div>
+
+      <!-- Sélecteur ville Cameroun -->
+      <div class="city-sel hidden" id="citySel">
+        <label style="display:block;font-size:13px;font-weight:600;margin-bottom:8px;color:var(--text-2)">Ville de destination :</label>
+        <select id="citySelect" onchange="updateShipping()" style="width:100%;padding:11px 14px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r-md);color:var(--text);font-size:14px;outline:none"></select>
+        <div class="city-info-box hidden" id="cityInfoBox">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <span id="cityInfoTxt"></span>
+        </div>
+      </div>
+
+      <div class="ck-nav-btns">
+        <button class="btn-outline" onclick="goStep(1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg> Retour</button>
+        <button class="btn-primary" style="flex:1" onclick="goStep(3)">Continuer vers le paiement <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="ck-panel hidden" id="step3">
+      <h2>Mode de paiement</h2>
+      <div class="pay-methods">
+
+        <label class="payment-opt" id="pay-orange_money" onclick="selectPayment('orange_money')">
+          <input type="radio" name="payment" value="orange_money"/>
+          <div class="pm-logo" style="background:#FF6600"><span style="color:#fff;font-weight:800;font-size:13px">OM</span></div>
+          <div class="pm-info"><strong>Orange Money</strong><small>+237 Orange CM</small></div>
+        </label>
+
+        <label class="payment-opt" id="pay-mtn_momo" onclick="selectPayment('mtn_momo')">
+          <input type="radio" name="payment" value="mtn_momo"/>
+          <div class="pm-logo" style="background:#FFCC00"><span style="color:#000;font-weight:800;font-size:11px">MTN</span></div>
+          <div class="pm-info"><strong>MTN MoMo</strong><small>+237 MTN CM</small></div>
+        </label>
+
+        <label class="payment-opt" id="pay-cinetpay" onclick="selectPayment('cinetpay')">
+          <input type="radio" name="payment" value="cinetpay"/>
+          <div class="pm-logo" style="background:#003087"><span style="color:#fff;font-weight:800;font-size:12px">CP</span></div>
+          <div class="pm-info"><strong>CinetPay</strong><small>Carte / Mobile</small></div>
+        </label>
+
+        <label class="payment-opt" id="pay-fedapay" onclick="selectPayment('fedapay')">
+          <input type="radio" name="payment" value="fedapay"/>
+          <div class="pm-logo" style="background:#00875A"><span style="color:#fff;font-weight:800;font-size:12px">FP</span></div>
+          <div class="pm-info"><strong>FedaPay</strong><small>Carte / Mobile</small></div>
+        </label>
+
+      </div>
+
+      <!-- Formulaire Mobile Money -->
+      <div class="pay-form hidden" id="formMobile">
+        <h4 id="mobileLabel">Numéro Orange Money (+237)</h4>
+        <div class="form-group"><label>Votre numéro</label><input type="tel" id="mmPhone" placeholder="+237 6XX XXX XXX"/></div>
+        <div style="background:#fff8e1;border:1px solid #fde68a;border-radius:var(--r-md);padding:12px 14px;font-size:13px;color:#92400e;display:flex;align-items:center;gap:8px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Vous recevrez une notification de confirmation sur votre téléphone.
+        </div>
+      </div>
+
+      <!-- Formulaire Carte -->
+      <div class="pay-form hidden" id="formCard">
+        <h4>Paiement par carte bancaire</h4>
+        <div class="card-3d">
+          <div class="card-chip"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+          <div class="card-num" id="prevNum">•••• •••• •••• ••••</div>
+          <div class="card-foot"><span id="prevName">NOM DU TITULAIRE</span><span id="prevExp">MM/AA</span></div>
+        </div>
+        <div class="form-group"><label>Numéro de carte</label><input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Expiration</label><input type="text" id="cardExp" placeholder="MM/AA" maxlength="5" oninput="fmtExp(this)"/></div>
+          <div class="form-group"><label>CVV</label><input type="text" id="cardCVV" placeholder="123" maxlength="3"/></div>
+        </div>
+        <div class="form-group"><label>Nom du titulaire</label><input type="text" id="cardName" placeholder="JEAN KAMGA" oninput="updateCardName(this)"/></div>
+      </div>
+
+      <div class="cgv-row">
+        <input type="checkbox" id="cgv"/>
+        <label for="cgv">J'accepte les <a href="#">conditions générales de vente</a> et la <a href="#">politique de confidentialité</a> de ModaAfrik Cameroun</label>
+      </div>
+
+      <div class="ck-nav-btns">
+        <button class="btn-outline" onclick="goStep(2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12,19 5,12 12,5"/></svg> Retour</button>
+        <button class="btn-gold btn-full" onclick="processPayment()" id="btnPay" style="flex:1">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span id="btnPayTxt">Confirmer et payer</span> — <span id="btnTotal"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RÉCAPITULATIF -->
+  <div class="ck-summary">
+    <h3>Votre commande</h3>
+    <div class="s-items" id="summaryItems"></div>
+    <div class="s-row"><span>Sous-total</span><span id="sumSub">—</span></div>
+    <div class="s-row" id="shipRow"><span>Livraison</span><span id="sumShip">—</span></div>
+    <div class="s-row s-total"><span>Total</span><span id="sumTotal">—</span></div>
+    <div class="s-trust">
+      <div class="s-trust-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Paiement 100% sécurisé</div>
+      <div class="s-trust-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg> Livraison suivie partout au Cameroun</div>
+      <div class="s-trust-row"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,4 23,10 17,10"/><polyline points="1,20 1,14 7,14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Retour sous 7 jours</div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL CONFIRMATION -->
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal-box">
+    <div style="font-size:56px;margin-bottom:16px">✅</div>
+    <h2>Commande confirmée !</h2>
+    <p>Merci pour votre achat sur ModaAfrik Cameroun.</p>
+    <div class="order-number" id="orderNum">#MA-00000</div>
+    <p style="font-size:13px;color:var(--text-3);margin-top:8px">Paiement via <strong id="payMethodConfirm"></strong> · Confirmation par SMS au +237</p>
+    <div class="modal-actions">
+      <a href="index.html" class="btn-primary">Retour à l'accueil</a>
+      <a href="shop.html" class="btn-outline">Continuer les achats</a>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/checkout.js" defer></script>
+</body>
+</html>

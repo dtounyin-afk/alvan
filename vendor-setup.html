@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Activation Compte Vendeur — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/vendor-setup.css"/>
+</head>
+<body style="background:var(--bg);min-height:100vh">
+
+<div class="vsetup-header">
+  <div class="vsetup-logo">
+    <div class="auth-logo-mark" style="width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center"><svg width="13" height="13" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#e8a838"/></svg></div>
+    ModaAfrik
+  </div>
+  <div class="vsetup-secure">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Formulaire sécurisé · Données chiffrées
+  </div>
+</div>
+
+<div class="vsetup-body">
+
+  <!-- VÉRIFICATION TOKEN -->
+  <div id="tokenCheck" class="vsetup-panel">
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:48px;margin-bottom:16px">🔐</div>
+      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:10px">Activation compte vendeur</h2>
+      <p style="font-size:14px;color:var(--text-2);margin-bottom:24px">Ce formulaire est accessible uniquement via une invitation de l'administrateur ModaAfrik.</p>
+      <div class="form-group" style="max-width:340px;margin:0 auto 16px">
+        <label>Code d'invitation *</label>
+        <input type="text" id="inviteToken" placeholder="Code fourni par l'administrateur" style="text-align:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;letter-spacing:4px"/>
+      </div>
+      <button class="btn-primary" onclick="verifyToken()">Vérifier le code</button>
+    </div>
+  </div>
+
+  <!-- FORMULAIRE VENDEUR (visible après vérification token) -->
+  <div id="vendorSetupForm" class="hidden">
+
+    <!-- ÉTAPES -->
+    <div class="vsetup-steps">
+      <div class="vstep active" id="vstep1"><span class="vstep-num">1</span><span>Identité</span></div>
+      <div class="vstep-line"></div>
+      <div class="vstep" id="vstep2"><span class="vstep-num">2</span><span>Boutique</span></div>
+      <div class="vstep-line"></div>
+      <div class="vstep" id="vstep3"><span class="vstep-num">3</span><span>Vérification KYC</span></div>
+      <div class="vstep-line"></div>
+      <div class="vstep" id="vstep4"><span class="vstep-num">4</span><span>Paiements</span></div>
+      <div class="vstep-line"></div>
+      <div class="vstep" id="vstep5"><span class="vstep-num">5</span><span>Confirmation</span></div>
+    </div>
+
+    <!-- ÉTAPE 1 : Identité -->
+    <div class="vsetup-panel" id="vs1">
+      <h2>Vos informations personnelles</h2>
+      <div class="form-row">
+        <div class="form-group"><label>Prénom *</label><input type="text" id="v1FN" placeholder="Prénom"/></div>
+        <div class="form-group"><label>Nom *</label><input type="text" id="v1LN" placeholder="Nom"/></div>
+      </div>
+      <div class="form-group"><label>Email *</label><input type="email" id="v1Email" placeholder="email@exemple.com"/></div>
+      <div class="form-group"><label>Téléphone Cameroun *</label><input type="tel" id="v1Phone" placeholder="+237 6XX XXX XXX"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Date de naissance *</label><input type="date" id="v1DOB"/></div>
+        <div class="form-group"><label>Numéro CNI *</label><input type="text" id="v1CNI" placeholder="Ex: 001234567"/></div>
+      </div>
+      <div class="form-group"><label>Mot de passe *</label>
+        <div class="input-pw">
+          <input type="password" id="v1Pwd" placeholder="Min. 8 caractères" oninput="checkPwdStrength(this,'v1PwdBar','v1PwdLbl')"/>
+          <button type="button" onclick="togglePwd('v1Pwd')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <div class="pw-bar-wrap"><div class="pw-bar" id="v1PwdBar"></div></div>
+        <div id="v1PwdLbl" style="font-size:11px;color:var(--text-3);margin-top:3px"></div>
+      </div>
+      <div class="form-group"><label>Confirmer le mot de passe *</label><input type="password" id="v1PwdC" placeholder="Répéter"/></div>
+      <button class="btn-primary btn-full" onclick="vsNext(2)">Continuer →</button>
+    </div>
+
+    <!-- ÉTAPE 2 : Boutique -->
+    <div class="vsetup-panel hidden" id="vs2">
+      <h2>Votre boutique</h2>
+      <div class="form-group"><label>Nom de la boutique *</label><input type="text" id="v2StoreName" placeholder="Ex: Mode Cameroun Créations"/></div>
+      <div class="form-group"><label>Description *</label><textarea id="v2Desc" rows="3" placeholder="Décrivez vos produits et votre savoir-faire…"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Ville *</label>
+          <select id="v2City">
+            <option value="">Sélectionner…</option>
+            <option>Douala</option><option>Yaoundé</option><option>Bafoussam</option>
+            <option>Bamenda</option><option>Garoua</option><option>Maroua</option>
+            <option>Ngaoundéré</option><option>Bertoua</option><option>Kribi</option>
+            <option>Limbé</option><option>Buea</option><option>Kumba</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Quartier / Adresse *</label><input type="text" id="v2Address" placeholder="Quartier, rue…"/></div>
+      </div>
+      <div class="form-group"><label>Catégorie principale *</label>
+        <select id="v2Cat">
+          <option value="">Choisir…</option>
+          <option>Robes &amp; Pagnes</option><option>Boubous</option>
+          <option>Vêtements Homme</option><option>Enfants</option>
+          <option>Accessoires</option><option>Bijoux</option><option>Chaussures</option>
+          <option>Multi-catégories</option>
+        </select>
+      </div>
+      <div class="step-nav">
+        <button class="btn-outline" onclick="vsNext(1)">← Retour</button>
+        <button class="btn-primary" onclick="vsNext(3)">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 3 : KYC / Vérification identité -->
+    <div class="vsetup-panel hidden" id="vs3">
+      <h2>Vérification d'identité <span class="kyc-badge">KYC Obligatoire</span></h2>
+      <div class="kyc-notice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <strong>Vérification d'identité obligatoire</strong>
+          <p>Pour garantir la sécurité de la plateforme et de nos clients, nous exigeons une vérification d'identité complète. Toutes les données sont chiffrées et stockées de façon sécurisée.</p>
+        </div>
+      </div>
+
+      <!-- CNI RECTO -->
+      <div class="kyc-upload-group">
+        <div class="kyc-upload-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <div>
+            <strong>Carte Nationale d'Identité — Recto *</strong>
+            <span>Photo claire de la face avant de votre CNI</span>
+          </div>
+        </div>
+        <div class="kyc-upload-zone" onclick="triggerUpload('cniRecto','prevCniRecto')">
+          <input type="file" id="cniRecto" accept="image/*" style="display:none" onchange="previewKYC(this,'prevCniRecto')"/>
+          <div id="prevCniRecto" class="kyc-preview-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            <p>Cliquez pour uploader</p>
+            <small>JPG, PNG — Max 5 Mo</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- CNI VERSO -->
+      <div class="kyc-upload-group">
+        <div class="kyc-upload-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <div>
+            <strong>Carte Nationale d'Identité — Verso *</strong>
+            <span>Photo claire de la face arrière de votre CNI</span>
+          </div>
+        </div>
+        <div class="kyc-upload-zone" onclick="triggerUpload('cniVerso','prevCniVerso')">
+          <input type="file" id="cniVerso" accept="image/*" style="display:none" onchange="previewKYC(this,'prevCniVerso')"/>
+          <div id="prevCniVerso" class="kyc-preview-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16,16 12,12 8,16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            <p>Cliquez pour uploader</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SELFIE EN DIRECT (caméra) -->
+      <div class="kyc-upload-group">
+        <div class="kyc-upload-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <div>
+            <strong>Selfie en direct *</strong>
+            <span>Photo prise à l'instant depuis votre caméra (non téléchargeable)</span>
+          </div>
+        </div>
+        <div id="selfieZone" class="kyc-camera-zone">
+          <video id="selfieVideo" autoplay playsinline style="display:none;width:100%;border-radius:8px;max-height:240px;object-fit:cover"></video>
+          <canvas id="selfieCanvas" style="display:none"></canvas>
+          <div id="selfiePreview" class="kyc-preview-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <p>Selfie en temps réel requis</p>
+          </div>
+          <div class="kyc-camera-btns">
+            <button class="btn-outline btn-sm" onclick="startCamera('selfie')" id="btnStartSelfie">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Ouvrir la caméra
+            </button>
+            <button class="btn-primary btn-sm hidden" onclick="capturePhoto('selfie')" id="btnCaptureSelfie">
+              📸 Prendre la photo
+            </button>
+            <button class="btn-ghost btn-sm hidden" onclick="retakePhoto('selfie')" id="btnRetakeSelfie">Reprendre</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SELFIE AVEC CNI -->
+      <div class="kyc-upload-group">
+        <div class="kyc-upload-label">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <div>
+            <strong>Selfie tenant votre CNI *</strong>
+            <span>Photo en direct — vous tenant votre CNI bien visible face caméra</span>
+          </div>
+        </div>
+        <div class="kyc-camera-zone">
+          <video id="selfiecniVideo" autoplay playsinline style="display:none;width:100%;border-radius:8px;max-height:240px;object-fit:cover"></video>
+          <canvas id="selfiecniCanvas" style="display:none"></canvas>
+          <div id="selfiecniPreview" class="kyc-preview-placeholder">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <p>Tenez votre CNI bien visible</p>
+          </div>
+          <div class="kyc-camera-btns">
+            <button class="btn-outline btn-sm" onclick="startCamera('selfiecni')" id="btnStartSelfiecni">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              Ouvrir la caméra
+            </button>
+            <button class="btn-primary btn-sm hidden" onclick="capturePhoto('selfiecni')" id="btnCaptureSelfiecni">📸 Prendre la photo</button>
+            <button class="btn-ghost btn-sm hidden" onclick="retakePhoto('selfiecni')" id="btnRetakeSelfiecni">Reprendre</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="kyc-consent">
+        <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-size:13px;color:var(--text-2)">
+          <input type="checkbox" id="kycConsent" style="accent-color:var(--gold);margin-top:2px;flex-shrink:0"/>
+          Je consens à la collecte et au traitement de mes données personnelles et biométriques dans le cadre de la vérification d'identité ModaAfrik, conformément à la politique de confidentialité.
+        </label>
+      </div>
+
+      <div class="step-nav">
+        <button class="btn-outline" onclick="vsNext(2)">← Retour</button>
+        <button class="btn-primary" onclick="vsNext(4)">Continuer →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 4 : Paiements -->
+    <div class="vsetup-panel hidden" id="vs4">
+      <h2>Compte de réception des paiements</h2>
+      <div class="kyc-notice" style="background:#ecfdf5;border-color:#a7f3d0">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#065f46" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <div>
+          <strong style="color:#065f46">Commission ModaAfrik : 10%</strong>
+          <p style="color:#047857">Sur chaque vente, 10% est retenu par ModaAfrik. Vous recevez 90% du montant de vente sur votre compte de réception.</p>
+        </div>
+      </div>
+      <div class="form-group"><label>Méthode principale *</label>
+        <select id="v4Method" onchange="showPaySetup()">
+          <option value="">Choisir…</option>
+          <option value="orange">Orange Money</option>
+          <option value="mtn">MTN Mobile Money</option>
+          <option value="bank">Virement bancaire</option>
+        </select>
+      </div>
+      <div id="paySetupOrange" class="hidden">
+        <div class="form-group"><label>Numéro Orange Money *</label><input type="tel" id="v4OM" placeholder="+237 6XX XXX XXX"/></div>
+        <div class="form-group"><label>Nom enregistré sur le compte</label><input type="text" id="v4OMName" placeholder="Nom complet"/></div>
+      </div>
+      <div id="paySetupMTN" class="hidden">
+        <div class="form-group"><label>Numéro MTN MoMo *</label><input type="tel" id="v4MTN" placeholder="+237 6XX XXX XXX"/></div>
+        <div class="form-group"><label>Nom enregistré sur le compte</label><input type="text" id="v4MTNName" placeholder="Nom complet"/></div>
+      </div>
+      <div id="paySetupBank" class="hidden">
+        <div class="form-group"><label>Banque *</label><input type="text" id="v4Bank" placeholder="Ex: BICEC, Afriland First Bank, UBA"/></div>
+        <div class="form-group"><label>Numéro de compte *</label><input type="text" id="v4BankNum" placeholder="Numéro de compte"/></div>
+        <div class="form-group"><label>Nom du titulaire *</label><input type="text" id="v4BankName" placeholder="Nom complet"/></div>
+      </div>
+      <div class="form-group" style="margin-top:4px"><label>Fréquence de versement</label>
+        <select>
+          <option>Hebdomadaire (chaque lundi)</option>
+          <option>Bi-mensuel (1er et 15 du mois)</option>
+          <option>Mensuel (1er du mois)</option>
+        </select>
+      </div>
+      <div class="step-nav">
+        <button class="btn-outline" onclick="vsNext(3)">← Retour</button>
+        <button class="btn-primary" onclick="vsSubmit()">Soumettre le dossier →</button>
+      </div>
+    </div>
+
+    <!-- ÉTAPE 5 : Confirmation -->
+    <div class="vsetup-panel hidden" id="vs5">
+      <div style="text-align:center;padding:20px 0">
+        <div style="font-size:64px;margin-bottom:16px;animation:popIn .5s cubic-bezier(.34,1.56,.64,1)">📋</div>
+        <h2 style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:12px">Dossier soumis avec succès !</h2>
+        <p style="font-size:14px;color:var(--text-2);max-width:440px;margin:0 auto 24px;line-height:1.6">
+          Votre dossier de vérification d'identité est en cours d'examen par l'équipe ModaAfrik. Ce processus peut prendre jusqu'à <strong>48 heures ouvrables</strong>.
+        </p>
+        <div class="confirm-steps">
+          <div class="cs-item done"><div class="cs-dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20,6 9,17 4,12"/></svg></div><span>Dossier reçu</span></div>
+          <div class="cs-item pending"><div class="cs-dot cs-pending">2</div><span>Vérification KYC en cours</span></div>
+          <div class="cs-item pending"><div class="cs-dot cs-pending">3</div><span>Activation de votre boutique</span></div>
+        </div>
+        <p style="font-size:13px;color:var(--text-3);margin-top:24px">Vous recevrez un email + SMS de confirmation dès que votre compte sera activé.</p>
+        <a href="index.html" class="btn-primary" style="margin-top:20px;display:inline-flex">Retour à l'accueil</a>
+      </div>
+    </div>
+
+  </div><!-- /#vendorSetupForm -->
+</div><!-- /.vsetup-body -->
+
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/vendor-setup.js" defer></script>
+</body>
+</html>

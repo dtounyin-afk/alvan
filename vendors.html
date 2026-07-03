@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Vendeurs — ModaAfrik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'"/>
+  <link rel="stylesheet" href="assets/css/main.css"/>
+  <link rel="stylesheet" href="assets/css/vendors.css"/>
+</head>
+<body>
+<header class="header" id="header">
+  <nav class="navbar">
+    <a href="index.html" class="logo"><span class="logo-star">✦</span>ModaAfrik</a>
+    <div class="nav-search">
+      <input type="text" placeholder="Rechercher un vendeur…" id="vendorSearch" oninput="filterVendors(this.value)"/>
+      <button>🔍</button>
+    </div>
+    <div class="nav-actions">
+      <a href="#contact-admin" class="btn-vendor">Vendre</a>
+      <a href="auth.html" class="nav-icon-btn">👤</a>
+      <a href="cart.html" class="nav-icon-btn cart-icon">🛒<span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+</header>
+<main class="container vendors-page">
+  <div class="vendors-hero">
+    <h1>Nos <em>Vendeurs</em></h1>
+    <p>500+ créateurs indépendants de toute l'Afrique</p>
+  </div>
+  <div class="vendors-filters" id="cityFilters">
+    <button class="size-tag active" onclick="filterCity('',this)">Tous</button>
+    <button class="size-tag" onclick="filterCity('Dakar',this)">📍 Dakar</button>
+    <button class="size-tag" onclick="filterCity('Lagos',this)">📍 Lagos</button>
+    <button class="size-tag" onclick="filterCity('Abidjan',this)">📍 Abidjan</button>
+    <button class="size-tag" onclick="filterCity('Accra',this)">📍 Accra</button>
+    <button class="size-tag" onclick="filterCity('Conakry',this)">📍 Conakry</button>
+    <button class="size-tag" onclick="filterCity('Bamako',this)">📍 Bamako</button>
+  </div>
+  <div class="vendors-big-grid" id="vendorsGrid"></div>
+</main>
+<footer class="footer"><div class="footer-bottom container"><span>© 2025 ModaAfrik</span></div></footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/vendors.js" defer></script>
+</body>
+</html>
+

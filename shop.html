@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Boutique — ModaAfrik Cameroun</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'"/>
+<link rel="stylesheet" href="assets/css/main.css"/>
+<link rel="stylesheet" href="assets/css/shop.css"/>
+</head>
+<body>
+<header class="header" id="header">
+  <nav class="navbar">
+    <a href="index.html" class="logo"><div class="logo-mark"><svg width="14" height="14" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#f5f0e8"/></svg></div>ModaAfrik</a>
+    <div class="nav-search">
+      <input type="text" id="shopSearch" placeholder="Robes, boubous, bijoux camerounais…" autocomplete="off"/>
+      <button onclick="applyFilters()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    </div>
+    <div class="nav-actions">
+      <a href="#contact-admin" class="btn-vendor">Vendre</a>
+      <a href="auth.html" class="nav-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></a>
+      <a href="cart.html" class="nav-icon cart-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="cart-badge" id="cartBadge">0</span></a>
+    </div>
+  </nav>
+  <div class="nav-cats"><div class="nav-cats-inner">
+    <a href="shop.html?cat=robes-pagnes">Robes &amp; Pagnes</a>
+    <a href="shop.html?cat=boubous">Boubous</a>
+    <a href="shop.html?cat=hommes">Hommes</a>
+    <a href="shop.html?cat=enfants">Enfants</a>
+    <a href="shop.html?cat=accessoires">Accessoires</a>
+    <a href="shop.html?cat=bijoux">Bijoux</a>
+    <a href="shop.html?cat=chaussures">Chaussures</a>
+  </div></div>
+</header>
+
+<main class="shop-page container">
+  <div class="breadcrumb"><a href="index.html">Accueil</a><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg><span class="current-cat">Boutique</span></div>
+
+  <div class="shop-layout">
+    <!-- SIDEBAR -->
+    <aside class="shop-sidebar">
+      <button class="filter-toggle" onclick="document.getElementById('filtersWrap').classList.toggle('open')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+        Filtres
+      </button>
+      <div class="filters-wrap" id="filtersWrap">
+        <div class="filter-head"><span>Filtres</span><button onclick="resetFilters()" class="filter-reset">Réinitialiser</button></div>
+
+        <div class="filter-group">
+          <div class="filter-label">Catégories</div>
+          <div id="catFilters" class="filter-checks">
+            <label class="fcheck"><input type="checkbox" value="robes-pagnes" onchange="applyFilters()"/> Robes &amp; Pagnes</label>
+            <label class="fcheck"><input type="checkbox" value="boubous" onchange="applyFilters()"/> Boubous</label>
+            <label class="fcheck"><input type="checkbox" value="hommes" onchange="applyFilters()"/> Hommes</label>
+            <label class="fcheck"><input type="checkbox" value="enfants" onchange="applyFilters()"/> Enfants</label>
+            <label class="fcheck"><input type="checkbox" value="accessoires" onchange="applyFilters()"/> Accessoires</label>
+            <label class="fcheck"><input type="checkbox" value="bijoux" onchange="applyFilters()"/> Bijoux</label>
+            <label class="fcheck"><input type="checkbox" value="chaussures" onchange="applyFilters()"/> Chaussures</label>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Prix (FCFA)</div>
+          <div class="price-row">
+            <input type="number" id="fMin" placeholder="Min" onchange="applyFilters()"/>
+            <span>—</span>
+            <input type="number" id="fMax" placeholder="Max" onchange="applyFilters()"/>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Tailles</div>
+          <div class="size-tags-grid">
+            <button class="size-tag size-tag-filter" data-size="XS" onclick="toggleSize(this)">XS</button>
+            <button class="size-tag size-tag-filter" data-size="S" onclick="toggleSize(this)">S</button>
+            <button class="size-tag size-tag-filter" data-size="M" onclick="toggleSize(this)">M</button>
+            <button class="size-tag size-tag-filter" data-size="L" onclick="toggleSize(this)">L</button>
+            <button class="size-tag size-tag-filter" data-size="XL" onclick="toggleSize(this)">XL</button>
+            <button class="size-tag size-tag-filter" data-size="XXL" onclick="toggleSize(this)">XXL</button>
+          </div>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">Note minimale</div>
+          <select id="fRating" onchange="applyFilters()">
+            <option value="0">Toutes les notes</option>
+            <option value="4">4 ★ et plus</option>
+            <option value="3">3 ★ et plus</option>
+          </select>
+        </div>
+      </div>
+    </aside>
+
+    <!-- PRODUITS -->
+    <div class="shop-main">
+      <div class="shop-toolbar">
+        <div style="font-size:14px;color:var(--text-2)"><strong id="prodCount">0</strong> produits</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <select id="sortSel" onchange="applyFilters()" class="sort-sel">
+            <option value="">Pertinence</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+            <option value="new">Nouveautés</option>
+            <option value="popular">Populaires</option>
+            <option value="rating">Meilleures notes</option>
+          </select>
+          <div class="view-btns">
+            <button class="size-tag active" id="vGrid" onclick="setView('grid')">⊞</button>
+            <button class="size-tag" id="vList" onclick="setView('list')">☰</button>
+          </div>
+        </div>
+      </div>
+      <div class="products-grid" id="shopGrid">
+        <div class="skeleton" style="padding-bottom:130%"></div>
+        <div class="skeleton" style="padding-bottom:130%"></div>
+        <div class="skeleton" style="padding-bottom:130%"></div>
+        <div class="skeleton" style="padding-bottom:130%"></div>
+      </div>
+      <div class="pagination" id="pagination" style="display:flex;gap:6px;justify-content:center;margin-top:40px;flex-wrap:wrap"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer"><div class="footer-bottom"><div class="container footer-bottom-inner"><span>© 2025 ModaAfrik Cameroun</span></div></div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/data.js" defer></script>
+<script src="assets/js/cart.js" defer></script>
+<script src="assets/js/shop.js" defer></script>
+</body>
+</html>
+
